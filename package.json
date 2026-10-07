@@ -1,0 +1,32 @@
+{
+  "name": "basecamp-mcp",
+  "version": "1.0.0",
+  "description": "Vzdálený MCP konektor, který propojuje Claude s Basecampem",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "cf-typegen": "wrangler types --include-runtime false"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/janbezecny/Basecamp-.git"
+  },
+  "bugs": {
+    "url": "https://github.com/janbezecny/Basecamp-/issues"
+  },
+  "homepage": "https://github.com/janbezecny/Basecamp-#readme",
+  "dependencies": {
+    "@cloudflare/workers-oauth-provider": "^1.2.3",
+    "@modelcontextprotocol/server": "2.0.0",
+    "agents": "^0.26.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261007.1",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.148.0"
+  },
+  "private": true,
+  "type": "module"
+}

@@ -1,0 +1,3 @@
+# Zkopíruj jako .dev.vars pro lokální vývoj (`npm run dev`).
+BASECAMP_CLIENT_ID=
+BASECAMP_CLIENT_SECRET=

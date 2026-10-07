@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "basecamp-mcp",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  // Úložiště pro OAuth granty a tokeny konektoru.
+  // Vytvoř ho příkazem `npx wrangler kv namespace create OAUTH_KV` a sem vlož vrácené id.
+  "kv_namespaces": [{ "binding": "OAUTH_KV", "id": "REPLACE_WITH_KV_NAMESPACE_ID" }],
+  // Tajné hodnoty se nastavují přes `npx wrangler secret put …`, ne tady:
+  //   BASECAMP_CLIENT_ID, BASECAMP_CLIENT_SECRET
+  "observability": { "enabled": true }
+}
