@@ -5,7 +5,7 @@
 | MODRA | 17 | 0.048 |
 | CERVENA | 1 | 0.091 |
 | ORANZOVA | 4 | 0.084 |
-| BILA | 14 | 0.142 |
+| BILA | 13 | 0.151 |
 
 | kód kusu | barva | rozměr Š×V (mm) | plocha (cm²) |
 |---|---|---|---|
@@ -27,11 +27,11 @@
 | LFD-BL-016 | MODRA | 253 × 231 | 151 |
 | LFD-BL-017 | MODRA | 27 × 17 | 3 |
 | LFD-RD-001 | CERVENA | 677 × 517 | 913 |
-| LFD-OR-001 | ORANZOVA | 603 × 351 | 749 |
+| LFD-OR-001 | ORANZOVA | 600 × 350 | 749 |
 | LFD-OR-002 | ORANZOVA | 188 × 84 | 48 |
 | LFD-OR-003 | ORANZOVA | 104 × 37 | 18 |
 | LFD-OR-004 | ORANZOVA | 90 × 42 | 21 |
-| LFD-WH-001 | BILA | 30 × 23 | 3 |
+| LFD-WH-001 | BILA | 30 × 24 | 3 |
 | LFD-WH-002 | BILA | 80 × 67 | 19 |
 | LFD-WH-003 | BILA | 38 × 98 | 17 |
 | LFD-WH-004 | BILA | 22 × 22 | 2 |
@@ -42,6 +42,5 @@
 | LFD-WH-009 | BILA | 72 × 39 | 6 |
 | LFD-WH-010 | BILA | 21 × 19 | 2 |
 | LFD-WH-011 | BILA | 501 × 283 | 363 |
-| LFD-WH-012 | BILA | 137 × 63 | 32 |
-| LFD-WH-013 | BILA | 45 × 39 | 6 |
-| LFD-WH-014 | BILA | 178 × 369 | 415 |
+| LFD-WH-012 | BILA | 45 × 39 | 6 |
+| LFD-WH-013 | BILA | 188 × 387 | 539 |

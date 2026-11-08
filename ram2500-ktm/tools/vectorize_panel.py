@@ -29,6 +29,7 @@ MIN_AREA_MM2 = 150.0  # drops splatter dots smaller than roughly 8 x 18 mm
 OVERLAP_MM = 2.0
 CLEARANCE_MM = 3.0
 SIMPLIFY_MM = 0.4
+LOGO_GAP_MM = 15.0  # black (paint) outline kept around the KTM letters so they stay readable
 
 
 def classify(rgb):
@@ -167,12 +168,30 @@ def main(img_path, cfg_path, out_dir):
         near_edge = g.buffer(seam + 1, join_style=2).intersection(cut_area.difference(panel))
         geoms[cc] = unary_union([g, near_edge])
 
+    # original KTM logo replaces the traced letters (placements from tools/fit_logo.py)
+    logo_mm = Polygon()
+    if cfg.get("ktm_logo"):
+        pl = json.loads((Path(img_path).parent / "ktm_placements.json").read_text())["placements"]
+        parts = [Polygon(p["shell"], p["holes"]) for v in pl.values() for p in v]
+        logo_full = to_mm(unary_union(parts))
+        logo_mm = logo_full.intersection(cut_area)
+        if not logo_mm.is_empty:
+            ring = logo_mm.buffer(LOGO_GAP_MM, join_style=2)
+            for cc in geoms:
+                geoms[cc] = geoms[cc].difference(ring)
+            # the traced (distorted) letters leave white "ghost" slivers around the real logo:
+            # clear traced white from the whole logo area so only the original logo remains there
+            hull = unary_union([p.convex_hull for p in as_list(logo_full)]).buffer(50, join_style=2)
+            geoms["WH"] = geoms["WH"].difference(hull)
+
     # exclusive regions, upper colour wins, then lower gets 2 mm overlap under upper
     final = {}
     upper = Polygon()
     for name, cc, _ in reversed(COLORS):
         g = geoms[cc].difference(upper)
         g = manufacturable(g)
+        if cc == "WH" and not logo_mm.is_empty:
+            g = unary_union([g, logo_mm])  # exact logo geometry, not rounded by manufacturable()
         final[cc] = g
         upper = unary_union([upper, g])
     for i, (name, cc, _) in enumerate(COLORS):
@@ -180,7 +199,8 @@ def main(img_path, cfg_path, out_dir):
         tuck = final[cc].buffer(OVERLAP_MM, join_style=1).intersection(above)
         g = unary_union([final[cc], tuck])
         g = g.intersection(cut_area).difference(keepout)
-        g = keep_big(g.buffer(0)).simplify(SIMPLIFY_MM, preserve_topology=True)
+        g = keep_big(g.buffer(0)).simplify(SIMPLIFY_MM if logo_mm.is_empty or cc != "WH" else 0.1,
+                                           preserve_topology=True)
         # drop orphan seam tabs (pieces lying mostly outside the panel)
         g = unary_union([p for p in as_list(g) if p.intersection(panel).area >= 0.5 * p.area] or [Polygon()])
         final[cc] = g

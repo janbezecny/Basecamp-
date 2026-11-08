@@ -4,7 +4,7 @@ Polep **není celopolep**. Černá v návrhu = černý lak vozu a nevyrábí se.
 Vyrábí se jen barevné segmenty (oranžová, modrá, červená, bílá) z řezané fólie.
 Každý kus se lepí samostatně na lak.
 
-> ⚠️ **STAV: DRAFT – všech 15 dílů zpracováno, 580 kusů.** Rozměry dílů jsou ODHAD (Gemini a proporce z vizualizace).
+> ⚠️ **STAV: DRAFT – všech 15 dílů zpracováno, 576 kusů, originální logo KTM dosazeno.** Rozměry dílů jsou ODHAD (Gemini a proporce z vizualizace).
 > Před řezáním je nutné je ověřit na voze. Viz „Co je potřeba“ níže.
 
 ## Co najdete kde
@@ -46,6 +46,8 @@ for f in panels/*.json; do c=$(basename $f .json); python3 -I tools/vectorize_pa
 python3 -I tools/build_overview.py out
 ```
 
+Po změně polohy loga KTM nejdřív: `python3 -I tools/fit_logo.py source/ktm_logo_original.webp source`
+
 ## Pravidla použitá ve vektorizaci
 
 - min. šířka tvaru 5 mm (užší části a ostré špičky se zaoblí nebo odstraní)
@@ -54,12 +56,30 @@ python3 -I tools/build_overview.py out
 - tvary dosahující na hranu dílu pokračují 6 mm do spáry nebo za hranu (i do lemu podběhu)
 - odstup 3 mm od klik, světel, antény, nasávání kapoty a emblémů (emblémy zůstávají originální, nebo se vloží vektor)
 
-## Co v datech není (rozhodnout zvlášť)
+## Rozhodnutí zákazníka (platí)
 
-- **grafika přes okna** (rozstřiky na zadních bočních a zadním okně): jen perforovanou fólií (One Way Vision), nebo vynechat
-- sloupky kabiny, rámy oken, zrcátka, horní plochy blatníků vedle kapoty, prahy
-- palivová dvířka na levém boku korby nejsou ve vizualizaci vidět. Polohu změřte a doplňte do `panels/LBS.json` jako překážku.
-- nápis KTM je vektorizovaný z obrázku. Pro finál ho nahraďte originálním logem KTM.
+| Téma | Rozhodnutí | Stav |
+|---|---|---|
+| grafika přes okna | **useknout u oken**, na skla se nic nelepí | ✅ hotovo: dveře a boky končí na lince okna, střecha nezasahuje do skel |
+| sloupky kabiny, zrcátka, prahy | **zpracujeme později** | ⏳ TODO, viz níže |
+| palivová dvířka (LBS) | **neřešit**, dořízne se ručně při montáži | ✅ hotovo |
+| logo KTM | **použít originální vektor** (`source/ktm_logo_original.webp` → `source/ktm_logo.svg`) | ✅ hotovo na LFD/LRD, RRD/RFD, TG |
+
+### Logo KTM
+
+- `tools/fit_logo.py` převede dodané logo na vektor a umístí ho na tři místa návrhu (levý bok, pravý bok, víko korby).
+- Logo se jen zvětšuje, otáčí a posouvá. **Nikdy se nedeformuje** (žádné zkosení), proporce zůstávají originální.
+  Doladění polohy je v `ADJUST` ve `fit_logo.py`.
+- Kolem písmen zůstává 15 mm černá mezera (lak), aby bylo logo čitelné. Obkreslený nápis z vizualizace je v oblasti loga odstraněný.
+- Na bocích logo přechází přes spáru dveří (LFD→LRD, RRD→RFD) a dělí se na ní s přesahem 6 mm.
+
+### TODO – zpracujeme později
+
+- [ ] sloupky kabiny (A, B, C) a rámy kolem oken
+- [ ] zrcátka
+- [ ] prahy
+- [ ] přeměřit vůz a doplnit `size_mm` do `panels/*.json`
+- [ ] logo RAM / RAM 2500 (zatím ponechány originální emblémy vozu, v datech jako překážky)
 
 ## Kontrola výstupu z Gemini
 
@@ -92,5 +112,5 @@ python3 -I tools/build_overview.py out
 2. **Zdrojový návrh ve vyšším rozlišení.** Vizualizace má na dveřích jen cca 166 px na 1 110 mm,
    tedy cca 7 mm na pixel. Tvary jsou proto interpretace. Originální soubor od designéra
    (ideálně vektor, nebo boční pohledy min. 4000 px na šířku) zásadně zpřesní výsledek.
-3. Originální vektory loga KTM a RAM.
+3. ~~Originální vektor loga KTM~~ ✅ dodáno. Případně vektor RAM, pokud se má lepit.
 4. Grafik zkontroluje v Illustratoru/Inkscapu a udělá nesting na šíři role. Na první díl zkušební tisk 1:1 na papír.

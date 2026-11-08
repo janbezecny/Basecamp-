@@ -8,7 +8,7 @@
  "colors": {
   "MODRA": {
    "pieces": 13,
-   "area_m2": 0.0418
+   "area_m2": 0.0405
   },
   "CERVENA": {
    "pieces": 2,
@@ -19,8 +19,8 @@
    "area_m2": 0.0725
   },
   "BILA": {
-   "pieces": 20,
-   "area_m2": 0.1691
+   "pieces": 19,
+   "area_m2": 0.1703
   }
  }
 }

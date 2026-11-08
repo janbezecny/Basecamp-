@@ -4,8 +4,8 @@
 |---|---|---|
 | MODRA | 13 | 0.064 |
 | CERVENA | 12 | 0.009 |
-| ORANZOVA | 12 | 0.111 |
-| BILA | 10 | 0.390 |
+| ORANZOVA | 12 | 0.108 |
+| BILA | 10 | 0.386 |
 
 | kód kusu | barva | rozměr Š×V (mm) | plocha (cm²) |
 |---|---|---|---|
@@ -21,7 +21,7 @@
 | RRD-BL-010 | MODRA | 265 × 160 | 154 |
 | RRD-BL-011 | MODRA | 138 × 69 | 16 |
 | RRD-BL-012 | MODRA | 175 × 93 | 46 |
-| RRD-BL-013 | MODRA | 26 × 27 | 5 |
+| RRD-BL-013 | MODRA | 26 × 27 | 4 |
 | RRD-RD-001 | CERVENA | 28 × 151 | 28 |
 | RRD-RD-002 | CERVENA | 29 × 45 | 7 |
 | RRD-RD-003 | CERVENA | 10 × 40 | 3 |
@@ -41,18 +41,18 @@
 | RRD-OR-005 | ORANZOVA | 284 × 80 | 111 |
 | RRD-OR-006 | ORANZOVA | 98 × 122 | 30 |
 | RRD-OR-007 | ORANZOVA | 85 × 71 | 21 |
-| RRD-OR-008 | ORANZOVA | 577 × 232 | 364 |
+| RRD-OR-008 | ORANZOVA | 558 × 217 | 334 |
 | RRD-OR-009 | ORANZOVA | 53 × 24 | 8 |
 | RRD-OR-010 | ORANZOVA | 23 × 16 | 2 |
 | RRD-OR-011 | ORANZOVA | 17 × 14 | 2 |
 | RRD-OR-012 | ORANZOVA | 188 × 119 | 73 |
-| RRD-WH-001 | BILA | 296 × 406 | 499 |
+| RRD-WH-001 | BILA | 246 × 364 | 383 |
 | RRD-WH-002 | BILA | 35 × 29 | 6 |
 | RRD-WH-003 | BILA | 29 × 31 | 6 |
 | RRD-WH-004 | BILA | 36 × 20 | 4 |
 | RRD-WH-005 | BILA | 54 × 18 | 4 |
 | RRD-WH-006 | BILA | 26 × 12 | 2 |
-| RRD-WH-007 | BILA | 1077 × 583 | 3218 |
+| RRD-WH-007 | BILA | 1118 × 601 | 3266 |
 | RRD-WH-008 | BILA | 289 × 190 | 158 |
 | RRD-WH-009 | BILA | 31 × 18 | 3 |
-| RRD-WH-010 | BILA | 10 × 21 | 2 |
+| RRD-WH-010 | BILA | 46 × 108 | 25 |
