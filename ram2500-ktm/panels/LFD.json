@@ -1,0 +1,14 @@
+{
+  "code": "LFD",
+  "name": "Levé přední dveře (plech pod oknem)",
+  "size_mm": [1110, 820],
+  "crop_px": [340, 187, 506, 328],
+  "bleed_mm": {"left": 6, "right": 6, "top": 0, "bottom": 10},
+  "obstacles": [
+    {"label": "KLIKA (odhad polohy)", "rect": [810, 115, 1040, 165]}
+  ],
+  "logos": [
+    {"label": "RAM 2500 – emblém/nápis", "rect": [80, 460, 385, 585]}
+  ],
+  "registration": [[25, 25], [1085, 25], [25, 795], [1085, 795]]
+}
