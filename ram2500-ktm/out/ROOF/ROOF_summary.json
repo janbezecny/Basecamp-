@@ -1,0 +1,26 @@
+{
+ "code": "ROOF",
+ "name": "Střecha (pohled shora, vlevo = čelní sklo)",
+ "size_mm": [
+  1700,
+  1580
+ ],
+ "colors": {
+  "MODRA": {
+   "pieces": 17,
+   "area_m2": 0.1537
+  },
+  "CERVENA": {
+   "pieces": 19,
+   "area_m2": 0.069
+  },
+  "ORANZOVA": {
+   "pieces": 38,
+   "area_m2": 0.5172
+  },
+  "BILA": {
+   "pieces": 15,
+   "area_m2": 0.2057
+  }
+ }
+}

@@ -1,0 +1,26 @@
+{
+ "code": "FBMP-R",
+ "name": "Přední nárazník – pravý roh (vlevo na pohledu zepředu)",
+ "size_mm": [
+  471,
+  325
+ ],
+ "colors": {
+  "MODRA": {
+   "pieces": 1,
+   "area_m2": 0.0017
+  },
+  "CERVENA": {
+   "pieces": 8,
+   "area_m2": 0.0141
+  },
+  "ORANZOVA": {
+   "pieces": 1,
+   "area_m2": 0.0088
+  },
+  "BILA": {
+   "pieces": 4,
+   "area_m2": 0.0088
+  }
+ }
+}

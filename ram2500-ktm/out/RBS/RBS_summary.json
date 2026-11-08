@@ -1,0 +1,26 @@
+{
+ "code": "RBS",
+ "name": "Pravý bok korby",
+ "size_mm": [
+  1988,
+  994
+ ],
+ "colors": {
+  "MODRA": {
+   "pieces": 16,
+   "area_m2": 0.1451
+  },
+  "CERVENA": {
+   "pieces": 3,
+   "area_m2": 0.0095
+  },
+  "ORANZOVA": {
+   "pieces": 10,
+   "area_m2": 0.2079
+  },
+  "BILA": {
+   "pieces": 26,
+   "area_m2": 0.0778
+  }
+ }
+}

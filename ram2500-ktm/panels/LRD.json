@@ -1,0 +1,34 @@
+{
+ "code": "LRD",
+ "name": "Levé zadní dveře (plech pod oknem)",
+ "outline_px": [
+  [
+   506,
+   188
+  ],
+  [
+   672,
+   188
+  ],
+  [
+   672,
+   329
+  ],
+  [
+   506,
+   329
+  ]
+ ],
+ "mm_per_px": 7.0,
+ "obstacles_px": [
+  {
+   "label": "KLIKA",
+   "rect_px": [
+    612,
+    206,
+    645,
+    215
+   ]
+  }
+ ]
+}

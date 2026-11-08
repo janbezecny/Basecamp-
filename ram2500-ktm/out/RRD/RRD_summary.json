@@ -1,0 +1,26 @@
+{
+ "code": "RRD",
+ "name": "Pravé zadní dveře (plech pod oknem)",
+ "size_mm": [
+  1141,
+  987
+ ],
+ "colors": {
+  "MODRA": {
+   "pieces": 13,
+   "area_m2": 0.0645
+  },
+  "CERVENA": {
+   "pieces": 12,
+   "area_m2": 0.0093
+  },
+  "ORANZOVA": {
+   "pieces": 12,
+   "area_m2": 0.1112
+  },
+  "BILA": {
+   "pieces": 10,
+   "area_m2": 0.3901
+  }
+ }
+}

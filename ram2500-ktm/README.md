@@ -4,42 +4,62 @@ Polep **není celopolep**. Černá v návrhu = černý lak vozu a nevyrábí se.
 Vyrábí se jen barevné segmenty (oranžová, modrá, červená, bílá) z řezané fólie.
 Každý kus se lepí samostatně na lak.
 
-> ⚠️ **STAV: DRAFT.** Rozměry dílů jsou ODHAD (Gemini a proporce z vizualizace).
+> ⚠️ **STAV: DRAFT – všech 15 dílů zpracováno, 580 kusů.** Rozměry dílů jsou ODHAD (Gemini a proporce z vizualizace).
 > Před řezáním je nutné je ověřit na voze. Viz „Co je potřeba“ níže.
 
-## Struktura
+## Co najdete kde
 
-| Složka | Obsah |
-|---|---|
-| `source/` | schválená vizualizace návrhu |
-| `panels/*.json` | parametry dílu: rozměr v mm, výřez z návrhu, přesahy, překážky, loga |
-| `tools/vectorize_panel.py` | převod dílu z návrhu na řezací SVG |
-| `out/<DÍL>/` | výstupy pro díl |
-
-Výstupy pro každý díl (`out/LFD/`):
-
-- `LFD.svg` – montážní/kontrolní soubor 1:1 v mm s vrstvami
+- **`out/PREHLED_dilu.png`**: přehled všech 15 dílů na jednom listu
+- **`out/SOUHRN.md`**: počty kusů a spotřeba fólie po barvách a po dílech
+- `out/<DÍL>/<DÍL>.svg`: montážní a kontrolní soubor 1:1 v mm s vrstvami
   `LAK_NAHLED`, `OBRYS_DILU`, `PREKAZKY`, `MODRA`, `CERVENA`, `ORANZOVA`, `BILA`, `KODY`, `REGISTRACE`
-- `LFD_CUT_<BARVA>.svg` – čisté řezací kontury, jedna barva = jeden soubor
-- `LFD_preview.png` – náhled
-- `LFD_kusy.md` – tabulka kusů (kód, barva, rozměr, plocha) a spotřeba fólie
+- `out/<DÍL>/<DÍL>_CUT_<BARVA>.svg`: čisté řezací kontury, jedna barva = jeden soubor
+- `out/<DÍL>/<DÍL>_preview.png` a `<DÍL>_kusy.md`: náhled a tabulka kusů
+- `panels/<DÍL>.json`: definice dílu (obrys v pixelech návrhu, výřezy podběhů, překážky, loga, měřítko)
+- `tools/`: skripty (`vectorize_panel.py` převádí jeden díl, `build_overview.py` skládá přehled a souhrn)
 
-Kód kusu: `[díl]-[barva]-[číslo]`, např. `LFD-OR-002` (OR oranžová, BL modrá, RD červená, WH bílá).
-Souřadnice 0;0 = horní přední roh dílu.
+| Kód | Díl |
+|---|---|
+| LFF / RFF | přední blatník L / P |
+| LFD / RFD | přední dveře L / P (plech pod oknem) |
+| LRD / RRD | zadní dveře L / P |
+| LBS / RBS | bok korby L / P |
+| HOOD | kapota |
+| ROOF | střecha |
+| TG | víko korby |
+| FBMP-L / FBMP-R | přední nárazník, levý / pravý roh |
+| RBMP-L / RBMP-R | zadní nárazník, levá / pravá část |
+
+Kód kusu: `[díl]-[barva]-[číslo]`, např. `LRD-WH-003` (OR oranžová, BL modrá, RD červená, WH bílá).
+Každý výkres je **pohled zvenku na díl**. 0;0 = levý horní roh výkresu.
+
+## Měřítko
+
+- Boky: jednotné měřítko odvozené z rozvoru (3 792 mm = 542 px, tj. 7,0 mm/px). Tvary na sousedních dílech proto na sebe navazují.
+- Kapota, střecha, víko korby: rozměr podle odhadu (kapota 1 660 × 1 310, střecha 1 700 × 1 580, víko 1 640 × 620 mm).
+- Nárazníky: měřítko z šířky vozu (2 120 mm).
+
+**Po změření vozu** zapište do `panels/<DÍL>.json` hodnotu `"size_mm": [šířka, výška]` a spusťte znovu:
+
+```bash
+for f in panels/*.json; do c=$(basename $f .json); python3 -I tools/vectorize_panel.py source/navrh_design20_total_crazy2.webp $f out/$c; done
+python3 -I tools/build_overview.py out
+```
 
 ## Pravidla použitá ve vektorizaci
 
 - min. šířka tvaru 5 mm (užší části a ostré špičky se zaoblí nebo odstraní)
 - kusy pod 150 mm² (rozstřiky) a neodloupnutelné dírky se vypouští
 - barvy se nepřekrývají, spodní barva zasahuje 2 mm pod horní (pořadí: modrá → červená → oranžová → bílá navrchu)
-- tvary na spáře dveří: přesah 6 mm do spáry, spodní hrana dveří: 10 mm založení
-- odstup 3 mm od kliky a od emblému RAM 2500 (emblém zůstává originální, nebo se vloží vektor)
+- tvary dosahující na hranu dílu pokračují 6 mm do spáry nebo za hranu (i do lemu podběhu)
+- odstup 3 mm od klik, světel, antény, nasávání kapoty a emblémů (emblémy zůstávají originální, nebo se vloží vektor)
 
-Spuštění pro další díl:
+## Co v datech není (rozhodnout zvlášť)
 
-```bash
-python3 -I tools/vectorize_panel.py source/navrh_design20_total_crazy2.webp panels/LFD.json out/LFD
-```
+- **grafika přes okna** (rozstřiky na zadních bočních a zadním okně): jen perforovanou fólií (One Way Vision), nebo vynechat
+- sloupky kabiny, rámy oken, zrcátka, horní plochy blatníků vedle kapoty, prahy
+- palivová dvířka na levém boku korby nejsou ve vizualizaci vidět. Polohu změřte a doplňte do `panels/LBS.json` jako překážku.
+- nápis KTM je vektorizovaný z obrázku. Pro finál ho nahraďte originálním logem KTM.
 
 ## Kontrola výstupu z Gemini
 
@@ -57,7 +77,7 @@ python3 -I tools/vectorize_panel.py source/navrh_design20_total_crazy2.webp pane
 | Díl | Kód | Barvy | Poznámka |
 |---|---|---|---|
 | levý přední blatník | LFF | O, B, R, W | navazuje na kapotu a LFD, výřez světla a podběhu |
-| **levé přední dveře** | **LFD** | O, B, R, W | **hotový draft** – 34 kusů, začátek bílého „K“ na zadní hraně |
+| levé přední dveře | LFD | O, B, R, W | začátek bílého „K“ na zadní hraně |
 | levé zadní dveře | LRD | O, B, R, W | nese většinu loga KTM, navazuje na LFD |
 | levý bok korby | LBS | O, B, R, W | palivová dvířka, zadní světlo, mezera ke kabině |
 | pravá strana | RFF, RFD, RRD, RBS | O, B, R, W | není zrcadlo levé, KTM přechází přes spáru předních a zadních dveří |

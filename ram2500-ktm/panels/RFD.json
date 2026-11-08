@@ -1,0 +1,45 @@
+{
+ "code": "RFD",
+ "name": "Pravé přední dveře (plech pod oknem)",
+ "outline_px": [
+  [
+   535,
+   535
+  ],
+  [
+   698,
+   535
+  ],
+  [
+   698,
+   673
+  ],
+  [
+   535,
+   673
+  ]
+ ],
+ "mm_per_px": 7.0,
+ "obstacles_px": [
+  {
+   "label": "KLIKA",
+   "rect_px": [
+    548,
+    546,
+    580,
+    554
+   ]
+  }
+ ],
+ "logos_px": [
+  {
+   "label": "RAM 2500",
+   "rect_px": [
+    647,
+    604,
+    690,
+    626
+   ]
+  }
+ ]
+}

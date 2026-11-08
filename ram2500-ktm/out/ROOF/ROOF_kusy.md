@@ -1,0 +1,100 @@
+# ROOF – Střecha (pohled shora, vlevo = čelní sklo) – tabulka kusů (DRAFT)
+
+| barva | kusů | plocha fólie (m²) |
+|---|---|---|
+| MODRA | 17 | 0.154 |
+| CERVENA | 19 | 0.069 |
+| ORANZOVA | 38 | 0.517 |
+| BILA | 15 | 0.206 |
+
+| kód kusu | barva | rozměr Š×V (mm) | plocha (cm²) |
+|---|---|---|---|
+| ROOF-BL-001 | MODRA | 36 × 87 | 10 |
+| ROOF-BL-002 | MODRA | 12 × 23 | 2 |
+| ROOF-BL-003 | MODRA | 255 × 396 | 263 |
+| ROOF-BL-004 | MODRA | 22 × 32 | 4 |
+| ROOF-BL-005 | MODRA | 76 × 92 | 14 |
+| ROOF-BL-006 | MODRA | 13 × 23 | 2 |
+| ROOF-BL-007 | MODRA | 14 × 27 | 3 |
+| ROOF-BL-008 | MODRA | 15 × 26 | 3 |
+| ROOF-BL-009 | MODRA | 288 × 654 | 508 |
+| ROOF-BL-010 | MODRA | 17 × 31 | 3 |
+| ROOF-BL-011 | MODRA | 11 × 23 | 2 |
+| ROOF-BL-012 | MODRA | 75 × 128 | 18 |
+| ROOF-BL-013 | MODRA | 28 × 35 | 4 |
+| ROOF-BL-014 | MODRA | 24 × 50 | 5 |
+| ROOF-BL-015 | MODRA | 400 × 786 | 573 |
+| ROOF-BL-016 | MODRA | 62 × 108 | 18 |
+| ROOF-BL-017 | MODRA | 101 × 206 | 106 |
+| ROOF-RD-001 | CERVENA | 113 × 293 | 55 |
+| ROOF-RD-002 | CERVENA | 17 × 43 | 4 |
+| ROOF-RD-003 | CERVENA | 13 × 24 | 2 |
+| ROOF-RD-004 | CERVENA | 13 × 31 | 3 |
+| ROOF-RD-005 | CERVENA | 50 × 100 | 19 |
+| ROOF-RD-006 | CERVENA | 19 × 39 | 4 |
+| ROOF-RD-007 | CERVENA | 15 × 22 | 2 |
+| ROOF-RD-008 | CERVENA | 12 × 28 | 2 |
+| ROOF-RD-009 | CERVENA | 286 × 668 | 500 |
+| ROOF-RD-010 | CERVENA | 49 × 47 | 10 |
+| ROOF-RD-011 | CERVENA | 30 × 50 | 7 |
+| ROOF-RD-012 | CERVENA | 16 × 44 | 5 |
+| ROOF-RD-013 | CERVENA | 21 × 37 | 5 |
+| ROOF-RD-014 | CERVENA | 18 × 27 | 3 |
+| ROOF-RD-015 | CERVENA | 18 × 20 | 2 |
+| ROOF-RD-016 | CERVENA | 36 × 94 | 15 |
+| ROOF-RD-017 | CERVENA | 49 × 81 | 16 |
+| ROOF-RD-018 | CERVENA | 87 × 67 | 32 |
+| ROOF-RD-019 | CERVENA | 21 × 47 | 5 |
+| ROOF-OR-001 | ORANZOVA | 15 × 132 | 18 |
+| ROOF-OR-002 | ORANZOVA | 60 × 132 | 19 |
+| ROOF-OR-003 | ORANZOVA | 66 × 7 | 2 |
+| ROOF-OR-004 | ORANZOVA | 114 × 54 | 33 |
+| ROOF-OR-005 | ORANZOVA | 122 × 299 | 73 |
+| ROOF-OR-006 | ORANZOVA | 346 × 615 | 385 |
+| ROOF-OR-007 | ORANZOVA | 112 × 183 | 87 |
+| ROOF-OR-008 | ORANZOVA | 15 × 26 | 2 |
+| ROOF-OR-009 | ORANZOVA | 19 × 33 | 2 |
+| ROOF-OR-010 | ORANZOVA | 145 × 59 | 60 |
+| ROOF-OR-011 | ORANZOVA | 224 × 310 | 161 |
+| ROOF-OR-012 | ORANZOVA | 639 × 1485 | 1576 |
+| ROOF-OR-013 | ORANZOVA | 310 × 702 | 385 |
+| ROOF-OR-014 | ORANZOVA | 29 × 51 | 6 |
+| ROOF-OR-015 | ORANZOVA | 19 × 36 | 5 |
+| ROOF-OR-016 | ORANZOVA | 38 × 42 | 9 |
+| ROOF-OR-017 | ORANZOVA | 26 × 38 | 6 |
+| ROOF-OR-018 | ORANZOVA | 331 × 685 | 510 |
+| ROOF-OR-019 | ORANZOVA | 26 × 34 | 7 |
+| ROOF-OR-020 | ORANZOVA | 43 × 56 | 8 |
+| ROOF-OR-021 | ORANZOVA | 242 × 518 | 346 |
+| ROOF-OR-022 | ORANZOVA | 21 × 41 | 5 |
+| ROOF-OR-023 | ORANZOVA | 11 × 31 | 3 |
+| ROOF-OR-024 | ORANZOVA | 14 × 21 | 2 |
+| ROOF-OR-025 | ORANZOVA | 13 × 25 | 2 |
+| ROOF-OR-026 | ORANZOVA | 23 × 41 | 4 |
+| ROOF-OR-027 | ORANZOVA | 40 × 24 | 6 |
+| ROOF-OR-028 | ORANZOVA | 15 × 27 | 2 |
+| ROOF-OR-029 | ORANZOVA | 434 × 777 | 478 |
+| ROOF-OR-030 | ORANZOVA | 84 × 140 | 30 |
+| ROOF-OR-031 | ORANZOVA | 199 × 355 | 92 |
+| ROOF-OR-032 | ORANZOVA | 450 × 589 | 625 |
+| ROOF-OR-033 | ORANZOVA | 194 × 373 | 177 |
+| ROOF-OR-034 | ORANZOVA | 46 × 66 | 8 |
+| ROOF-OR-035 | ORANZOVA | 25 × 64 | 10 |
+| ROOF-OR-036 | ORANZOVA | 48 × 85 | 10 |
+| ROOF-OR-037 | ORANZOVA | 29 × 73 | 11 |
+| ROOF-OR-038 | ORANZOVA | 33 × 65 | 7 |
+| ROOF-WH-001 | BILA | 195 × 550 | 204 |
+| ROOF-WH-002 | BILA | 15 × 24 | 2 |
+| ROOF-WH-003 | BILA | 58 × 66 | 12 |
+| ROOF-WH-004 | BILA | 13 × 24 | 2 |
+| ROOF-WH-005 | BILA | 18 × 16 | 2 |
+| ROOF-WH-006 | BILA | 68 × 56 | 21 |
+| ROOF-WH-007 | BILA | 417 × 1148 | 1285 |
+| ROOF-WH-008 | BILA | 49 × 70 | 12 |
+| ROOF-WH-009 | BILA | 21 × 57 | 4 |
+| ROOF-WH-010 | BILA | 155 × 59 | 70 |
+| ROOF-WH-011 | BILA | 201 × 420 | 293 |
+| ROOF-WH-012 | BILA | 65 × 57 | 20 |
+| ROOF-WH-013 | BILA | 44 × 83 | 26 |
+| ROOF-WH-014 | BILA | 150 × 205 | 89 |
+| ROOF-WH-015 | BILA | 48 × 95 | 14 |

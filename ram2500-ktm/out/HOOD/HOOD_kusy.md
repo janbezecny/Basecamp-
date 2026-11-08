@@ -1,0 +1,65 @@
+# HOOD – Kapota (pohled shora, nahoře = čelní sklo) – tabulka kusů (DRAFT)
+
+| barva | kusů | plocha fólie (m²) |
+|---|---|---|
+| MODRA | 9 | 0.223 |
+| CERVENA | 20 | 0.234 |
+| ORANZOVA | 17 | 0.304 |
+| BILA | 8 | 0.072 |
+
+| kód kusu | barva | rozměr Š×V (mm) | plocha (cm²) |
+|---|---|---|---|
+| HOOD-BL-001 | MODRA | 306 × 1162 | 918 |
+| HOOD-BL-002 | MODRA | 17 × 44 | 5 |
+| HOOD-BL-003 | MODRA | 170 × 630 | 411 |
+| HOOD-BL-004 | MODRA | 25 × 19 | 3 |
+| HOOD-BL-005 | MODRA | 16 × 27 | 3 |
+| HOOD-BL-006 | MODRA | 17 × 35 | 4 |
+| HOOD-BL-007 | MODRA | 182 × 280 | 257 |
+| HOOD-BL-008 | MODRA | 215 × 600 | 455 |
+| HOOD-BL-009 | MODRA | 129 × 407 | 175 |
+| HOOD-RD-001 | CERVENA | 86 × 467 | 178 |
+| HOOD-RD-002 | CERVENA | 55 × 94 | 29 |
+| HOOD-RD-003 | CERVENA | 64 × 217 | 72 |
+| HOOD-RD-004 | CERVENA | 58 × 269 | 89 |
+| HOOD-RD-005 | CERVENA | 21 × 33 | 4 |
+| HOOD-RD-006 | CERVENA | 17 × 37 | 4 |
+| HOOD-RD-007 | CERVENA | 23 × 44 | 5 |
+| HOOD-RD-008 | CERVENA | 11 × 25 | 2 |
+| HOOD-RD-009 | CERVENA | 314 × 829 | 968 |
+| HOOD-RD-010 | CERVENA | 11 × 22 | 2 |
+| HOOD-RD-011 | CERVENA | 18 × 37 | 4 |
+| HOOD-RD-012 | CERVENA | 24 × 40 | 6 |
+| HOOD-RD-013 | CERVENA | 11 × 30 | 2 |
+| HOOD-RD-014 | CERVENA | 86 × 179 | 40 |
+| HOOD-RD-015 | CERVENA | 79 × 137 | 44 |
+| HOOD-RD-016 | CERVENA | 338 × 732 | 662 |
+| HOOD-RD-017 | CERVENA | 81 × 107 | 1 |
+| HOOD-RD-018 | CERVENA | 105 × 197 | 53 |
+| HOOD-RD-019 | CERVENA | 36 × 276 | 47 |
+| HOOD-RD-020 | CERVENA | 118 × 398 | 135 |
+| HOOD-OR-001 | ORANZOVA | 43 × 90 | 12 |
+| HOOD-OR-002 | ORANZOVA | 192 × 330 | 249 |
+| HOOD-OR-003 | ORANZOVA | 23 × 50 | 6 |
+| HOOD-OR-004 | ORANZOVA | 229 × 594 | 305 |
+| HOOD-OR-005 | ORANZOVA | 159 × 321 | 90 |
+| HOOD-OR-006 | ORANZOVA | 447 × 1138 | 976 |
+| HOOD-OR-007 | ORANZOVA | 174 × 242 | 102 |
+| HOOD-OR-008 | ORANZOVA | 230 × 285 | 389 |
+| HOOD-OR-009 | ORANZOVA | 36 × 97 | 18 |
+| HOOD-OR-010 | ORANZOVA | 15 × 29 | 3 |
+| HOOD-OR-011 | ORANZOVA | 20 × 44 | 5 |
+| HOOD-OR-012 | ORANZOVA | 30 × 93 | 12 |
+| HOOD-OR-013 | ORANZOVA | 39 × 80 | 10 |
+| HOOD-OR-014 | ORANZOVA | 118 × 180 | 76 |
+| HOOD-OR-015 | ORANZOVA | 260 × 548 | 597 |
+| HOOD-OR-016 | ORANZOVA | 230 × 381 | 171 |
+| HOOD-OR-017 | ORANZOVA | 32 × 114 | 17 |
+| HOOD-WH-001 | BILA | 9 × 29 | 2 |
+| HOOD-WH-002 | BILA | 78 × 223 | 42 |
+| HOOD-WH-003 | BILA | 77 × 201 | 32 |
+| HOOD-WH-004 | BILA | 125 × 774 | 367 |
+| HOOD-WH-005 | BILA | 84 × 174 | 28 |
+| HOOD-WH-006 | BILA | 184 × 380 | 222 |
+| HOOD-WH-007 | BILA | 28 × 72 | 5 |
+| HOOD-WH-008 | BILA | 51 × 209 | 20 |

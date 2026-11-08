@@ -1,0 +1,26 @@
+{
+ "code": "TG",
+ "name": "Víko korby (tailgate)",
+ "size_mm": [
+  1640,
+  620
+ ],
+ "colors": {
+  "MODRA": {
+   "pieces": 14,
+   "area_m2": 0.0718
+  },
+  "CERVENA": {
+   "pieces": 22,
+   "area_m2": 0.0475
+  },
+  "ORANZOVA": {
+   "pieces": 11,
+   "area_m2": 0.1023
+  },
+  "BILA": {
+   "pieces": 8,
+   "area_m2": 0.1705
+  }
+ }
+}

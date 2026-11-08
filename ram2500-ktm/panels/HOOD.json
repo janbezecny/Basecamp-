@@ -1,0 +1,45 @@
+{
+ "code": "HOOD",
+ "name": "Kapota (pohled shora, nahoře = čelní sklo)",
+ "outline_px": [
+  [
+   70,
+   848
+  ],
+  [
+   315,
+   848
+  ],
+  [
+   320,
+   952
+  ],
+  [
+   297,
+   978
+  ],
+  [
+   87,
+   978
+  ],
+  [
+   57,
+   952
+  ]
+ ],
+ "size_mm": [
+  1660,
+  1310
+ ],
+ "obstacles_px": [
+  {
+   "label": "NASAVANI / SCOOP",
+   "rect_px": [
+    150,
+    922,
+    237,
+    948
+   ]
+  }
+ ]
+}

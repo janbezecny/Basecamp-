@@ -112,46 +112,60 @@ def path_d(poly):
 def main(img_path, cfg_path, out_dir):
     cfg = json.loads(Path(cfg_path).read_text())
     code = cfg["code"]
-    W, H = cfg["size_mm"]
-    x0, y0, x1, y1 = cfg["crop_px"]
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
+    outline_px = Polygon(cfg["outline_px"])
+    bx0, by0, bx1, by1 = outline_px.bounds
+    if "size_mm" in cfg:  # measured / estimated size of the panel bounding box
+        W, H = cfg["size_mm"]
+        sx_px, sy_px = W / (bx1 - bx0), H / (by1 - by0)
+    else:  # one common scale for the whole view keeps seams between panels aligned
+        sx_px = sy_px = cfg["mm_per_px"]
+        W, H = (bx1 - bx0) * sx_px, (by1 - by0) * sy_px
+    W, H = round(W), round(H)
+
+    def to_mm(geom):
+        g = affinity.translate(geom, -bx0, -by0)
+        return affinity.scale(g, sx_px, sy_px, origin=(0, 0))
+
+    def rect_mm(r):
+        return to_mm(box(*r))
+
     src = np.array(Image.open(img_path).convert("RGB"))
+    x0, y0, x1, y1 = int(bx0), int(by0), int(np.ceil(bx1)), int(np.ceil(by1))
     crop = src[y0:y1, x0:x1]
     big = cv2.resize(crop, None, fx=UPSCALE, fy=UPSCALE, interpolation=cv2.INTER_CUBIC)
     big = cv2.bilateralFilter(big, 9, 40, 9)
-    sx, sy = W / big.shape[1], H / big.shape[0]
     masks = classify(big)
+    # mask pixel -> source px -> mm
+    sx, sy = sx_px / UPSCALE, sy_px / UPSCALE
+    off = ((x0 - bx0) * sx_px, (y0 - by0) * sy_px)
 
-    panel = box(0, 0, W, H)
-    bl = cfg.get("bleed_mm", {})
-    cut_area = box(-bl.get("left", 0), -bl.get("top", 0), W + bl.get("right", 0), H + bl.get("bottom", 0))
-    obstacles = [box(*o["rect"]) for o in cfg.get("obstacles", [])]
-    logos = [box(*l["rect"]) for l in cfg.get("logos", [])]
-    keepout = unary_union([o.buffer(CLEARANCE_MM, join_style=2) for o in obstacles + logos]) if (obstacles or logos) else Polygon()
+    panel = to_mm(outline_px)
+    for c in cfg.get("cutouts_px", []):
+        if "circle" in c:
+            cx, cy, r = c["circle"]
+            hole = Polygon([(cx + r * np.cos(t), cy + r * np.sin(t)) for t in np.linspace(0, 2 * np.pi, 180)])
+        else:
+            hole = Polygon(c["poly"])
+        panel = panel.difference(to_mm(hole))
+    panel = panel.buffer(0)
+    seam = cfg.get("seam_mm", 6)
+    cut_area = panel.buffer(seam, join_style=2)
+    obstacles = [dict(o, geom=rect_mm(o["rect_px"])) for o in cfg.get("obstacles_px", [])]
+    logos = [dict(o, geom=rect_mm(o["rect_px"])) for o in cfg.get("logos_px", [])]
+    keepout = unary_union([o["geom"].buffer(CLEARANCE_MM, join_style=2) for o in obstacles + logos]) \
+        if (obstacles or logos) else Polygon()
+    registration = cfg.get("registration") or [[25, 25], [W - 25, 25], [25, H - 25], [W - 25, H - 25]]
 
     geoms = {}
     for name, cc, _ in COLORS:
-        g = mask_to_geom(masks[cc], sx, sy)
-        # stretch geometry that touches a cut seam to the bleed line
-        g = g.buffer(0)
-        geoms[cc] = g
-
-    # extrude shapes that touch a panel edge straight out into the seam allowance
-    for cc, g in geoms.items():
-        ext = [g]
-        for side, b in bl.items():
-            if b <= 0:
-                continue
-            band = {"left": box(0, 0, 6, H), "right": box(W - 6, 0, W, H),
-                    "top": box(0, 0, W, 6), "bottom": box(0, H - 6, W, H)}[side]
-            # merge contacts closer than 40 mm so the allowance is one clean tab, not a comb
-            for part in as_list(g.intersection(band).buffer(20).buffer(-20).intersection(band)):
-                x, y, X, Y = part.bounds
-                ext.append({"left": box(-b, y, 6, Y), "right": box(W - 6, y, W + b, Y),
-                            "top": box(x, -b, X, 6), "bottom": box(x, H - 6, X, H + b)}[side])
-        geoms[cc] = unary_union(ext)
+        g = affinity.translate(mask_to_geom(masks[cc], sx, sy), *off).buffer(0)
+        g = g.intersection(panel)
+        # shapes reaching a panel edge continue into the seam / wrap allowance
+        near_edge = g.buffer(seam + 1, join_style=2).intersection(cut_area.difference(panel))
+        geoms[cc] = unary_union([g, near_edge])
 
     # exclusive regions, upper colour wins, then lower gets 2 mm overlap under upper
     final = {}
@@ -187,18 +201,18 @@ def main(img_path, cfg_path, out_dir):
     L = []
     L.append(f'<svg xmlns="http://www.w3.org/2000/svg" width="{W + 2 * pad}mm" height="{H + 2 * pad}mm" viewBox="{vb}">')
     L.append(f'<title>{code} – {cfg["name"]} – RAM 2500 KTM Total Crazy 2 (DRAFT)</title>')
-    L.append(f'<g id="LAK_NAHLED"><rect x="0" y="0" width="{W}" height="{H}" fill="#111111"/></g>')
+    panel_d = " ".join(path_d(p) for p in as_list(panel))
+    cut_d = " ".join(path_d(p) for p in as_list(cut_area))
+    L.append(f'<g id="LAK_NAHLED"><path fill="#111111" fill-rule="evenodd" d="{panel_d}"/></g>')
     L.append(f'<g id="OBRYS_DILU" fill="none" stroke="#888" stroke-width="0.3">'
-             f'<rect x="0" y="0" width="{W}" height="{H}"/>'
-             f'<rect x="{cut_area.bounds[0]}" y="{cut_area.bounds[1]}" width="{cut_area.bounds[2]-cut_area.bounds[0]}" '
-             f'height="{cut_area.bounds[3]-cut_area.bounds[1]}" stroke-dasharray="2 2"/></g>')
+             f'<path d="{panel_d}"/><path d="{cut_d}" stroke-dasharray="2 2"/></g>')
     L.append('<g id="PREKAZKY" fill="none" stroke="#bbb" stroke-width="0.5" stroke-dasharray="4 2">')
-    for o in cfg.get("obstacles", []):
-        x, y, X, Y = o["rect"]
+    for o in obstacles:
+        x, y, X, Y = o["geom"].bounds
         L.append(f'<rect x="{x}" y="{y}" width="{X-x}" height="{Y-y}" rx="6"/>'
                  f'<text x="{x+2}" y="{y-2}" font-size="7" fill="#bbb" stroke="none" font-family="Arial">{o["label"]}</text>')
-    for l in cfg.get("logos", []):
-        x, y, X, Y = l["rect"]
+    for l in logos:
+        x, y, X, Y = l["geom"].bounds
         L.append(f'<rect x="{x}" y="{y}" width="{X-x}" height="{Y-y}" stroke="#ff0"/>'
                  f'<text x="{x+3}" y="{y+12}" font-size="8" fill="#ff0" stroke="none" font-family="Arial">LOGO – vložit originální vektor</text>'
                  f'<text x="{x+3}" y="{y+24}" font-size="8" fill="#ff0" stroke="none" font-family="Arial">{l["label"]}</text>')
@@ -216,10 +230,10 @@ def main(img_path, cfg_path, out_dir):
         L.append(f'<text x="{pt.x:.1f}" y="{pt.y:.1f}" text-anchor="middle">{pc["id"]}</text>')
     L.append("</g>")
     L.append('<g id="REGISTRACE" stroke="#ff00ff" stroke-width="0.3" fill="none" font-family="Arial" font-size="6">')
-    for rx, ry in cfg.get("registration", []):
+    for rx, ry in registration:
         L.append(f'<circle cx="{rx}" cy="{ry}" r="4"/><path d="M{rx-8},{ry} H{rx+8} M{rx},{ry-8} V{ry+8}"/>')
         L.append(f'<text x="{rx+6}" y="{ry-6}" fill="#ff00ff" stroke="none">({rx:.0f}; {ry:.0f})</text>')
-    L.append(f'<text x="0" y="{H+20}" fill="#ff00ff" stroke="none">0;0 = horní přední roh dílu (pod lištou okna u přední spáry). Kóty v mm. ROZMĚRY = ODHAD, OVĚŘIT NA VOZE.</text>')
+    L.append(f'<text x="0" y="{H+20}" fill="#ff00ff" stroke="none">0;0 = levý horní roh výkresu, pohled zvenku na díl. Kóty v mm. ROZMĚRY = ODHAD, OVĚŘIT NA VOZE.</text>')
     L.append("</g></svg>")
     (out_dir / f"{code}.svg").write_text("\n".join(L), encoding="utf-8")
 
@@ -239,9 +253,12 @@ def main(img_path, cfg_path, out_dir):
     im = Image.new("RGB", (int((W + 2 * pad) * s), int((H + 2 * pad) * s)), "#f2f2f2")
     d = ImageDraw.Draw(im)
     T = lambda x, y: ((x + pad) * s, (y + pad) * s)
-    d.rectangle([T(0, 0), T(W, H)], fill="#111111")
-    for o in cfg.get("obstacles", []) + cfg.get("logos", []):
-        x, y, X, Y = o["rect"]
+    for p in as_list(panel):
+        d.polygon([T(x, y) for x, y in p.exterior.coords], fill="#111111")
+        for hole in p.interiors:
+            d.polygon([T(x, y) for x, y in hole.coords], fill="#f2f2f2")
+    for o in obstacles + logos:
+        x, y, X, Y = o["geom"].bounds
         d.rectangle([T(x, y), T(X, Y)], outline="#bbbbbb", width=2)
     for pc in pieces:
         for poly in as_list(pc["poly"]):
@@ -249,6 +266,7 @@ def main(img_path, cfg_path, out_dir):
                       outline="#777777" if pc["layer"] == "BILA" else None)
             for hole in poly.interiors:
                 d.polygon([T(x, y) for x, y in hole.coords], fill="#111111")
+    d.text((10, 10), f'{code} – {cfg["name"]} – {W} x {H} mm (odhad)', fill="#000000")
     im.save(out_dir / f"{code}_preview.png")
 
     # piece table
@@ -267,7 +285,11 @@ def main(img_path, cfg_path, out_dir):
     (out_dir / f"{code}_kusy.md").write_text(
         f"# {code} – {cfg['name']} – tabulka kusů (DRAFT)\n\n" + "\n".join(summary) + "\n\n" + "\n".join(rows) + "\n",
         encoding="utf-8")
-    print(code, {k: v[0] for k, v in totals.items()}, "pieces:", len(pieces))
+    print(code, f"{W}x{H}mm", {k: v[0] for k, v in totals.items()}, "pieces:", len(pieces))
+    (out_dir / f"{code}_summary.json").write_text(json.dumps({
+        "code": code, "name": cfg["name"], "size_mm": [W, H],
+        "colors": {k: {"pieces": v[0], "area_m2": round(v[1] / 1e6, 4)} for k, v in totals.items()},
+    }, ensure_ascii=False, indent=1), encoding="utf-8")
 
 
 if __name__ == "__main__":

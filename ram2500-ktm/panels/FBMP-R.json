@@ -1,0 +1,34 @@
+{
+ "code": "FBMP-R",
+ "name": "Přední nárazník – pravý roh (vlevo na pohledu zepředu)",
+ "outline_px": [
+  [
+   1043,
+   279
+  ],
+  [
+   1117,
+   279
+  ],
+  [
+   1117,
+   330
+  ],
+  [
+   1043,
+   330
+  ]
+ ],
+ "mm_per_px": 6.37,
+ "obstacles_px": [
+  {
+   "label": "MLHOVKA",
+   "rect_px": [
+    1055,
+    293,
+    1073,
+    303
+   ]
+  }
+ ]
+}

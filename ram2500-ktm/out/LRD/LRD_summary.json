@@ -1,0 +1,26 @@
+{
+ "code": "LRD",
+ "name": "Levé zadní dveře (plech pod oknem)",
+ "size_mm": [
+  1162,
+  987
+ ],
+ "colors": {
+  "MODRA": {
+   "pieces": 10,
+   "area_m2": 0.063
+  },
+  "CERVENA": {
+   "pieces": 14,
+   "area_m2": 0.0142
+  },
+  "ORANZOVA": {
+   "pieces": 16,
+   "area_m2": 0.1247
+  },
+  "BILA": {
+   "pieces": 17,
+   "area_m2": 0.3837
+  }
+ }
+}

@@ -1,0 +1,26 @@
+{
+ "code": "LBS",
+ "name": "Levý bok korby",
+ "size_mm": [
+  1827,
+  980
+ ],
+ "colors": {
+  "MODRA": {
+   "pieces": 18,
+   "area_m2": 0.1197
+  },
+  "CERVENA": {
+   "pieces": 5,
+   "area_m2": 0.0087
+  },
+  "ORANZOVA": {
+   "pieces": 9,
+   "area_m2": 0.1862
+  },
+  "BILA": {
+   "pieces": 21,
+   "area_m2": 0.0662
+  }
+ }
+}

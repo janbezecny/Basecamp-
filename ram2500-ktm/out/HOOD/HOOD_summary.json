@@ -1,0 +1,26 @@
+{
+ "code": "HOOD",
+ "name": "Kapota (pohled shora, nahoře = čelní sklo)",
+ "size_mm": [
+  1660,
+  1310
+ ],
+ "colors": {
+  "MODRA": {
+   "pieces": 9,
+   "area_m2": 0.2231
+  },
+  "CERVENA": {
+   "pieces": 20,
+   "area_m2": 0.2345
+  },
+  "ORANZOVA": {
+   "pieces": 17,
+   "area_m2": 0.3038
+  },
+  "BILA": {
+   "pieces": 8,
+   "area_m2": 0.0718
+  }
+ }
+}

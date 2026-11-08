@@ -1,0 +1,26 @@
+{
+ "code": "LFF",
+ "name": "Levý přední blatník",
+ "size_mm": [
+  1176,
+  1085
+ ],
+ "colors": {
+  "MODRA": {
+   "pieces": 16,
+   "area_m2": 0.0629
+  },
+  "CERVENA": {
+   "pieces": 3,
+   "area_m2": 0.0653
+  },
+  "ORANZOVA": {
+   "pieces": 3,
+   "area_m2": 0.0043
+  },
+  "BILA": {
+   "pieces": 11,
+   "area_m2": 0.0074
+  }
+ }
+}

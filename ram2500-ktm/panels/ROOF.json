@@ -1,0 +1,73 @@
+{
+ "code": "ROOF",
+ "name": "Střecha (pohled shora, vlevo = čelní sklo)",
+ "outline_px": [
+  [
+   450,
+   851
+  ],
+  [
+   737,
+   851
+  ],
+  [
+   737,
+   990
+  ],
+  [
+   450,
+   990
+  ]
+ ],
+ "size_mm": [
+  1700,
+  1580
+ ],
+ "obstacles_px": [
+  {
+   "label": "svetlo",
+   "rect_px": [
+    452,
+    872,
+    472,
+    882
+   ]
+  },
+  {
+   "label": "svetlo",
+   "rect_px": [
+    452,
+    905,
+    472,
+    917
+   ]
+  },
+  {
+   "label": "svetlo",
+   "rect_px": [
+    452,
+    942,
+    472,
+    952
+   ]
+  },
+  {
+   "label": "svetlo",
+   "rect_px": [
+    452,
+    975,
+    472,
+    985
+   ]
+  },
+  {
+   "label": "ANTENA",
+   "rect_px": [
+    663,
+    918,
+    683,
+    932
+   ]
+  }
+ ]
+}

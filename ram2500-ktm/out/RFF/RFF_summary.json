@@ -1,0 +1,26 @@
+{
+ "code": "RFF",
+ "name": "Pravý přední blatník",
+ "size_mm": [
+  1134,
+  1071
+ ],
+ "colors": {
+  "MODRA": {
+   "pieces": 9,
+   "area_m2": 0.0615
+  },
+  "CERVENA": {
+   "pieces": 5,
+   "area_m2": 0.0624
+  },
+  "ORANZOVA": {
+   "pieces": 3,
+   "area_m2": 0.0059
+  },
+  "BILA": {
+   "pieces": 12,
+   "area_m2": 0.0095
+  }
+ }
+}

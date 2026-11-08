@@ -1,0 +1,26 @@
+{
+ "code": "RBMP-L",
+ "name": "Zadní nárazník – levá část",
+ "size_mm": [
+  572,
+  178
+ ],
+ "colors": {
+  "MODRA": {
+   "pieces": 2,
+   "area_m2": 0.0061
+  },
+  "CERVENA": {
+   "pieces": 1,
+   "area_m2": 0.0003
+  },
+  "ORANZOVA": {
+   "pieces": 2,
+   "area_m2": 0.0128
+  },
+  "BILA": {
+   "pieces": 2,
+   "area_m2": 0.0067
+  }
+ }
+}
