@@ -1,7 +1,7 @@
 # Prompt: AOV 2027 – CZ e-shop (2 nejlepší modely + forecast 2027)
 
 > Konsolidovaná verze předchozí vícekrokové konverzace. Vložte celý blok níže do nového chatu
-> a přiložte uvedené soubory. Hodnoty v hranatých závorkách upravte, pokud se změnily.
+> a přiložte uvedené soubory. Cíle růstu a názvy souborů upravte, pokud se změní.
 
 ---
 
