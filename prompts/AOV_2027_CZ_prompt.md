@@ -15,30 +15,46 @@ CÍL
 Najdi 2 nejlepší použitelné modely průměrné hodnoty objednávky (AOV) pro CZ e-shop a dej jejich
 forecast na rok 2027 (měsíčně I–XII/2027 + roční hodnota + pásmo). Jeden model na GA/BI bázi,
 jeden na sales/ERP bázi. Výběr musí být podložen backtestem, ne intuicí.
+Modeluješ pouze CZ eshop. Jiné existující forecasty/plány nepoužívej a nesrovnávej se s nimi.
 
 VSTUPNÍ DATA (přiložena)
-1) BI exporty „AOV allocated“ – měsíčně per kanál, CZ eshop (filtr: E-shop = CZ eshop,
-   DivisionSubType = eshop), leden 2025 – říjen 2026, ~24 kanálů.
-   Metriky: Sales allocated, Orders allocated, AOV allocated, GM1, Ads costs, PNO.
-   AOV = Sales allocated / Orders allocated. Používej jen „allocated“, ne „estimated“.
+1) BI exporty „AOV allocated“ – měsíčně per kanál, CZ eshop, I/2025–X/2026, ~24 kanálů.
+   Filtr exportu: E-shop = CZ eshop, DivisionSubType = eshop.
+   Soubory (22 měsíců):
+   - 2025: Leden_AOV_2025_2.xlsx, Únor_AOV_2025.xlsx, Březen_AOV_2025.xlsx, Duben_AOV_2025.xlsx,
+     Květen_AOV_2025.xlsx, Červen_AOV_2025.xlsx, Červenec_AOV_2025.xlsx, Srpen_AOV_2025.xlsx,
+     Září_AOV_2025.xlsx, Říjen_AOV_2025.xlsx, Listopad_AOV_2025.xlsx, Prosinec_AOV_2025.xlsx
+     (každý soubor = 1 měsíc, list Sheet1)
+   - 2026 I–V: Leden_AOV_2026.xlsx, Únor_AOV_2026.xlsx, Březen_AOV_2026.xlsx,
+     Duben_AOV_2026.xlsx, Květen_AOV_2026.xlsx (list Sheet1)
+   - 2026 VI–X: AOV_data_2025-2026.xlsx – jeden soubor, měsíc = list:
+     Sheet1 (4) = VI/2026, Sheet1 (3) = VII, Sheet1 (2) = VIII, Sheet1 (1) = IX, Sheet1 = X/2026
+   Sloupce: Channel, Sales allocated, Orders allocated, AOV allocated, GM1 allocated, Ads costs,
+   PNO allocated, Orders measured (+ estimated varianty – nepoužívat).
+   AOV = Sales allocated / Orders allocated (ověř na všech řádcích).
    Báze obsahuje produkty + služby (poštovné, balné).
-2) „Vývoj AOV 2023-2026 CZ SK HU.xlsx“ – měsíční produktové AOV (ERP, BEZ služeb),
-   I/2023–X/2026. Použij jen CZ.
-3) RS Budget 27 (Google Sheet / export) – měsíční ERP tržby a objednávky 2025–2027 pro CZ eshop
-   (2026 X–XII a 2027 jsou PLAN). Slouží k vážení, ke „mostu“ služeb a ke komparaci.
-4) [volitelně] Předchozí model AOV_2027_model_CZ.xlsx – jen pro kontrolu, nepřebírej z něj závěry.
+2) „Vývoj AOV 2023-2026 CZ SK HU.xlsx“ – měsíční produktové AOV (sales/ERP, BEZ služeb),
+   I/2023–X/2026. Použij jen list/řadu CZ.
 
 DŮLEŽITÉ VLASTNOSTI DAT (ošetři)
 - Říjen 2026 v BI = jen 1.–30. 10. → pro AOV bez vlivu, objemy jsou neúplné.
 - Listopad–prosinec 2026 nejsou skutečnost → nejdřív je dopočítej (viz krok 4).
-- BI vs. ERP: BI má o ~3 % více objednávek (alokované vs. realizované) a o ~3,5 % vyšší tržby.
-  Porovnávej růsty, ne koruny. Převod: služby_t = BI tržby_t − ERP tržby_t;
-  σ = podíl služeb na BI tržbách; r = BI obj. / ERP obj.; c = (1−σ)·r. Produktové AOV = BI AOV × c
-  (ověř, že vážený výsledek = ERP AOV; služby plánuj zvlášť v Kč/objednávku).
+- BI vs. ERP: báze se liší definicí objednávek (BI alokované, ERP realizované) i obsahem
+  (BI včetně služeb). Porovnávej růsty, ne koruny. Spočti měsíční koeficient k = AOV BI / AOV ERP
+  a jeho stabilitu; služby z těchto dat přímo izolovat nejde – uveď to jako omezení.
+- Roční AOV počítej vážené objednávkami; jako váhy použij Orders allocated z BI
+  (pro 2023–2024 ERP řady prostý průměr).
 - Kanály agreguj do 7 skupin: Brand (paid+organic sloučeně – atribuce mezi nimi skáče),
   Organic non-brand, Direct, Paid search non-brand, Shopping/Pmax/srovnávače,
   CRM (Newsletter+SMS), Social/Affil/Referral/Other.
-- Ověř podezřelé měsíce (např. únor 2026 v ERP/RSB27, červenec 2026 jako anomálně silný).
+- Ověř podezřelé měsíce (např. leden–únor 2026 slabé, červenec 2026 anomálně silný,
+  propad IX–X 2026).
+
+CÍL RŮSTU TRŽEB 2027 (YoY, pro výpočet implikací)
+Měsíc:     1    2    3    4    5    6    7    8    9   10   11   12  CELKEM
+CZ eshop:  5%   5%   5%  10%  10%   5%   8%   8%   5%   5%   5%   5%   6%
+SK eshop: 15%  15%  15%  15%  15%  15%  15%  15%  15%  15%  15%  15%  15%
+(SK jen pro kontext – modeluje se pouze CZ.)
 
 POSTUP
 1) Načti a sjednoť data, zkontroluj AOV = Sales/Orders, spočti sezónní indexy, YoY, LTM,
@@ -61,30 +77,32 @@ POSTUP
 3) BACKTEST (rolling origin, jen ex ante informace – žádná znalost budoucího mixu ani trendu):
    - Hlavní řez: data do 31. 3. 2026 → predikce IV–XII/2026, vyhodnoť na IV–X/2026.
    - Kontrolní řezy: do X/2025 (h=12), do IV/2026, do VI/2026, do VIII/2026 (→ IX–X).
-   - Metriky: MAPE, bias (+ = přestřelení), chyba ročního/průměrného AOV za testované období.
+   - Metriky: MAPE, bias (+ = přestřelení), chyba průměrného AOV za testované období.
    - Ex post varianty (např. B2 se skutečným mixem) uváděj jen jako diagnostiku, ne pro výběr.
    Pravidla výběru: nejnižší MAPE na hlavním řezu, |bias| < 2 %, stabilita přes řezy;
    modely, které extrapolují pokles 2023–25 (trend), preferuj jen jako dolní okraj.
 4) Dopočet XI–XII/2026 vybranými modely (tři varianty podle toho, kolik z propadu IX–X 2026
    přeteče: w = 0 / 0,5 / 1; spočti autokorelaci odchylek a w zdůvodni). Z toho 2026E.
-5) Forecast 2027 oběma vybranými modely: měsíčně, roční hodnota vážená objednávkami
-   (profil z RSB27), YoY vs. 2026E, pásmo dolní/střed/horní (pásmo z backtest chyb nebo
-   scénářů mixu).
-6) Komparace s RS Budget 27 (AOV 2026E a 2027, rozdíl v Kč a %) a implikace pro plán tržeb
-   +[15] %: kolik růstu přinese AOV a kolik musí dodat objednávky.
+5) Forecast 2027 oběma vybranými modely: měsíčně, roční hodnota vážená objednávkami,
+   YoY vs. 2026E, pásmo dolní/střed/horní (pásmo z backtest chyb nebo scénářů mixu).
+6) Implikace pro cíl tržeb CZ (tabulka výše): pro každý měsíc 2027 a celý rok spočti
+   potřebný růst objednávek = (1 + cíl tržeb) / (1 + růst AOV) − 1, pro oba modely.
+   Označ měsíce, kde je cíl (např. IV–V +10 %, VII–VIII +8 %) bez růstu objednávek
+   nad historický rámec nereálný.
 
 VÝSTUP
 A) V chatu (max. 1 obrazovka):
    - Tabulka backtestu „jako v březnu 2026“ pro obě báze: model | MAPE | bias | ex ante?
    - Dva vybrané modely (1× GA/BI, 1× ERP) a proč.
-   - Tabulka forecast 2027: měsíce I–XII + rok, pro oba modely, + RSB27 pro srovnání.
+   - Tabulka forecast 2027: měsíce I–XII + rok, pro oba modely, YoY vs. 2026E.
+   - Tabulka implikací: cíl tržeb CZ | růst AOV | potřebný růst objednávek, po měsících + rok.
    - Doporučená plánová hodnota AOV 2027 (BI i ERP báze) a pásmo.
-   - 3–5 bodů: hlavní předpoklady, rizika, co data nevysvětlí (promo, produktový mix).
-B) Excel „AOV_2027_CZ_final.xlsx“ – listy: Návod, Souhrn, Data_BI, Data_ERP, Most_služby,
-   Backtest, Model_GA (vybraný), Model_ERP (vybraný), Forecast_2027, Komparace_RSB27.
+   - 3–5 bodů: hlavní předpoklady, rizika, co data nevysvětlí (promo, produktový mix, služby).
+B) Excel „AOV_2027_CZ_final.xlsx“ – listy: Návod, Souhrn, Data_BI, Data_ERP, BI_vs_ERP,
+   Backtest, Model_GA (vybraný), Model_ERP (vybraný), Forecast_2027, Cíl_2027.
    Konvence: modrá = vstupní data, černá = vzorce, zelená = odkaz na jiný list,
-   žlutá = měnitelné parametry (α, γ, w, váhy, c) a klíčové výsledky. Výstupy Pythonu,
-   které nejdou vzorcem (SARIMA), vlož jako modré hodnoty. Po uzavření měsíce stačí
+   žlutá = měnitelné parametry (α, γ, w, váhy, k, cíle růstu) a klíčové výsledky. Výstupy
+   Pythonu, které nejdou vzorcem (SARIMA), vlož jako modré hodnoty. Po uzavření měsíce stačí
    přepsat vstupy a vše se přepočte.
 
 Nepiš mezikroky ani průběžné komentáře – dodej jen finální výsledek podle bodů A a B.
@@ -104,8 +122,7 @@ Nepiš mezikroky ani průběžné komentáře – dodej jen finální výsledek 
 | XI / XII 2026 | BI 1 042 / 1 176 Kč (w = 0,5); ERP ≈ 1 046 / 1 154 Kč |
 | AOV 2027 BI (Modely A/B) | 1 086 Kč, pásmo 1 078–1 107 Kč |
 | AOV 2027 ERP (ensemble TS1+TS3) | 1 061 Kč, pásmo 1 013–1 079 Kč |
-| RS Budget 27 – AOV 2027 | 1 069 Kč |
-| Služby (most BI − ERP) | 2025: 37,7 Kč/obj. (σ 3,5 %), 2026 I–IX: 45,1 Kč/obj. (σ 4,1 %), r ≈ 1,03 |
+| Koeficient k = AOV BI / AOV ERP | 2025 ≈ 1,004, 2026 ≈ 1,011 (měsíčně 0,98–1,03) |
 
 Hlavní poznatky: modely s trendem mají záporný bias (−3 až −7 %); měsíční AOV má šum ±3–6 %,
 roční hodnota je plánovatelná s přesností ±1,5–2 %; zlomy v létě a na podzim 2026 nejsou
