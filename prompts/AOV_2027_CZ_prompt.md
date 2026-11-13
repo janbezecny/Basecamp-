@@ -78,7 +78,7 @@ DŮLEŽITÉ VLASTNOSTI DAT (ošetři)
   Organic non-brand, Direct, Paid search non-brand, Shopping/Pmax/srovnávače,
   CRM (Newsletter+SMS), Social/Affil/Referral/Other.
 - Ověř podezřelé měsíce (např. leden–únor 2026 slabé, červenec 2026 anomálně silný,
-  propad IX–X 2026).
+  propad IX–X 2026). Duben 2026 = výpadek Google Ads (ban) – známá příčina, viz krok 5.
 
 CÍL RŮSTU TRŽEB 2027 (YoY, pro výpočet implikací)
 Měsíc:     1    2    3    4    5    6    7    8    9   10   11   12  CELKEM
@@ -119,8 +119,13 @@ POSTUP
    11,2 → 13,6 → 11,6 %; AOV (GA est) VII 1 069, VIII 1 079, IX 1 006, X 987 Kč.
    Týdenní data naznačují náběh od poloviny VII a plný režim od týdne končícího 9. 8. 2026
    (PNO > 12 %), v druhé polovině X mírné snížení – ověř.
-   Anomálie: IV/2026 má Ads costs jen 0,28 mil. Kč (PNO 2,2 %) – zkontroluj, zda jde o
-   výpadek dat nákladů, a případně vyřaď z analýzy PNO.
+   IV/2026 = výpadek Google Ads (ban účtu): Ads costs jen 0,28 mil. Kč (PNO 2,2 %), objednávky
+   z placených kanálů minimální. Data jsou správná, nejde o chybu. Duben 2026 (a náběh v V/2026)
+   proto: (1) označ jako mimořádný měsíc – nepoužívej ho k odhadu běžného mixu ani PNO a ve
+   forecastu 2027 s ním počítej jako s měsícem s normálním PPC; (2) využij ho jako přirozený
+   experiment „bez PPC“ – porovnej AOV a mix IV/2026 s VIII–X/2026 („max PPC“) a s H1 2026
+   (běžné PPC); získáš tak rozpětí vlivu intenzity PPC na AOV (Kč AOV na 1 p. b. podílu
+   placených kanálů); (3) v backtestech uveď, jak výpadek ovlivnil chyby modelů v dubnu.
    a) Z denních GA dat urči datum zlomu (změna nákladů PPC / podílu paid search a Shopping
       na objednávkách) a porovnej období před a po zlomu: AOV celkem, AOV po skupinách,
       podíl objednávek po skupinách, PNO. Rozlož změnu AOV na mixový a vnitrokanálový efekt.
