@@ -1,7 +1,7 @@
 # Prompt: AOV 2027 – CZ e-shop (2 nejlepší modely + forecast 2027)
 
 > Konsolidovaná verze předchozí vícekrokové konverzace. Vložte celý blok níže do nového chatu
-> a přiložte uvedené soubory. Cíle růstu a názvy souborů upravte, pokud se změní; doplňte název a období GA souboru ([NÁZEV_SOUBORU_GA], [od–do]).
+> a přiložte uvedené soubory. Cíle růstu a názvy souborů upravte, pokud se změní.
 
 ---
 
@@ -35,12 +35,36 @@ VSTUPNÍ DATA (přiložena)
    Báze obsahuje produkty + služby (poštovné, balné).
 2) „Vývoj AOV 2023-2026 CZ SK HU.xlsx“ – měsíční produktové AOV (sales/ERP, BEZ služeb),
    I/2023–X/2026. Použij jen list/řadu CZ.
-3) GA data CZ e-shop po kanálech a dnech – soubor [NÁZEV_SOUBORU_GA.xlsx/csv], období [od–do].
-   Očekávané sloupce: datum, kanál (default channel group / source-medium), tržby, transakce
-   (objednávky), [náklady na reklamu, relace] – skutečné názvy sloupců ověř a vypiš.
-   Použití: přesné určení data zlomu (kdy začalo navyšování PPC), denní/týdenní AOV a mix
-   kanálů před a po zlomu. Kanály namapuj na stejných 7 skupin jako BI a ověř, že měsíční
-   součty AOV z GA odpovídají BI exportům (rozdíl uveď v %).
+3) GA data CZ e-shop po kanálech a dnech (denní granularita, 1. 1. 2025 – 31. 10. 2026):
+   - CZ_1_6_2025_GA.xlsx   (1. 1. – 30. 6. 2025)
+   - CZ_7-12_2025_GA.xlsx  (1. 7. – 31. 12. 2025)
+   - CZ_1_10_2026_GA.xlsx  (1. 1. – 31. 10. 2026)
+   Struktura: list Sheet1, řádek 1 = popis filtrů (E-shop = CZ eshop, DivisionSubType = eshop,
+   Cookie measurement type = standard, Web sessions není prázdné), řádek 2 prázdný,
+   hlavička na řádku 3 (načítat header=2). 1 řádek = kanál × den, řádky nejsou seřazené.
+   Sloupce: E-shops hierarchy – E-shop, E-shops hierarchy – E-shop (detail), Channel, Date,
+   Sessions est, GA conversion rate, CR invoice est, Orders est, Sales est, AOV est, GM1 est,
+   GP est incl services, GP est products, Ads costs, Ads clicks, PNO est,
+   MP1 est incl services, MP1 est products.
+   24 kanálů (Channel): Google organic, Direct, Google ads brand, Google brand organic,
+   Google ads sea, Google ads pmax, Newsletter, Google ads pla, SMS, Seznam sklik brand, Other,
+   Heureka, Referral, Organic other, Seznam organic, Seznam brand organic, Facebook,
+   Seznam sklik sea, Zbozi, Affil, Srovname, Google ads other, Seznam sklik other,
+   Seznam sklik display.
+   Pozor: GA používá metriky „est“ (odhad), BI exporty „allocated“ → AOV se v jednotlivých
+   měsících liší (např. I/2025 GA 905 vs. BI 938 Kč). Porovnávej růsty a podíly, ne koruny;
+   rozdíl GA vs. BI po měsících vyčísli. AOV vždy počítej jako Σ Sales est / Σ Orders est
+   (nikdy neprůměruj sloupec AOV est).
+   Použití: (a) přesné určení data zlomu navýšení PPC (Ads costs po dnech/týdnech),
+   (b) denní/týdenní AOV a mix kanálů před a po zlomu, (c) proxy služeb:
+   GP est incl services − GP est products = hrubý zisk ze služeb (Kč/objednávku, měsíčně)
+   – použij k odhadu vlivu služeb na AOV a k ověření rozdílu BI vs. ERP.
+   Kanály namapuj na stejných 7 skupin jako BI (Brand = Google ads brand + Google brand
+   organic + Seznam sklik brand + Seznam brand organic; Paid search non-brand = Google ads sea
+   + Seznam sklik sea + Google ads other + Seznam sklik other/display; Shopping/Pmax/srovnávače
+   = Google ads pmax + Google ads pla + Heureka + Zbozi + Srovname; CRM = Newsletter + SMS;
+   Organic non-brand = Google organic + Seznam organic + Organic other; Direct;
+   Social/Affil/Referral/Other = Facebook + Affil + Referral + Other) a mapování ukaž.
 
 DŮLEŽITÉ VLASTNOSTI DAT (ošetři)
 - Říjen 2026 v BI = jen 1.–30. 10. → pro AOV bez vlivu, objemy jsou neúplné.
@@ -90,8 +114,13 @@ POSTUP
 4) Dopočet XI–XII/2026 vybranými modely (tři varianty podle toho, kolik z propadu IX–X 2026
    přeteče: w = 0 / 0,5 / 1; spočti autokorelaci odchylek a w zdůvodni). Z toho 2026E.
 5) VÁHA REŽIMU VIII–X/2026 (navýšení PPC):
-   Od srpna 2026 se výrazně navýšily investice do PPC (náklady 2,1–2,5 mil. Kč/měs.,
-   PNO 11–13 % vs. 6–9 % v H1; objednávky +21–23 % YoY, AOV IX–X −1 až −3 % YoY).
+   Od léta 2026 se výrazně navýšily investice do PPC. Orientačně z GA: Ads costs
+   VI/2026 1,25 mil. → VII 2,11 → VIII 2,64 → IX 2,61 → X 2,27 mil. Kč; PNO 7,6 % → 9,6 →
+   11,2 → 13,6 → 11,6 %; AOV (GA est) VII 1 069, VIII 1 079, IX 1 006, X 987 Kč.
+   Týdenní data naznačují náběh od poloviny VII a plný režim od týdne končícího 9. 8. 2026
+   (PNO > 12 %), v druhé polovině X mírné snížení – ověř.
+   Anomálie: IV/2026 má Ads costs jen 0,28 mil. Kč (PNO 2,2 %) – zkontroluj, zda jde o
+   výpadek dat nákladů, a případně vyřaď z analýzy PNO.
    a) Z denních GA dat urči datum zlomu (změna nákladů PPC / podílu paid search a Shopping
       na objednávkách) a porovnej období před a po zlomu: AOV celkem, AOV po skupinách,
       podíl objednávek po skupinách, PNO. Rozlož změnu AOV na mixový a vnitrokanálový efekt.
