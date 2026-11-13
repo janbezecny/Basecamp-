@@ -1,7 +1,7 @@
 # Prompt: AOV 2027 – CZ e-shop (2 nejlepší modely + forecast 2027)
 
 > Konsolidovaná verze předchozí vícekrokové konverzace. Vložte celý blok níže do nového chatu
-> a přiložte uvedené soubory. Cíle růstu a názvy souborů upravte, pokud se změní.
+> a přiložte uvedené soubory. Cíle růstu a názvy souborů upravte, pokud se změní; doplňte název a období GA souboru ([NÁZEV_SOUBORU_GA], [od–do]).
 
 ---
 
@@ -35,6 +35,12 @@ VSTUPNÍ DATA (přiložena)
    Báze obsahuje produkty + služby (poštovné, balné).
 2) „Vývoj AOV 2023-2026 CZ SK HU.xlsx“ – měsíční produktové AOV (sales/ERP, BEZ služeb),
    I/2023–X/2026. Použij jen list/řadu CZ.
+3) GA data CZ e-shop po kanálech a dnech – soubor [NÁZEV_SOUBORU_GA.xlsx/csv], období [od–do].
+   Očekávané sloupce: datum, kanál (default channel group / source-medium), tržby, transakce
+   (objednávky), [náklady na reklamu, relace] – skutečné názvy sloupců ověř a vypiš.
+   Použití: přesné určení data zlomu (kdy začalo navyšování PPC), denní/týdenní AOV a mix
+   kanálů před a po zlomu. Kanály namapuj na stejných 7 skupin jako BI a ověř, že měsíční
+   součty AOV z GA odpovídají BI exportům (rozdíl uveď v %).
 
 DŮLEŽITÉ VLASTNOSTI DAT (ošetři)
 - Říjen 2026 v BI = jen 1.–30. 10. → pro AOV bez vlivu, objemy jsou neúplné.
@@ -83,10 +89,27 @@ POSTUP
    modely, které extrapolují pokles 2023–25 (trend), preferuj jen jako dolní okraj.
 4) Dopočet XI–XII/2026 vybranými modely (tři varianty podle toho, kolik z propadu IX–X 2026
    přeteče: w = 0 / 0,5 / 1; spočti autokorelaci odchylek a w zdůvodni). Z toho 2026E.
-5) Forecast 2027 oběma vybranými modely: měsíčně, roční hodnota vážená objednávkami,
+5) VÁHA REŽIMU VIII–X/2026 (navýšení PPC):
+   Od srpna 2026 se výrazně navýšily investice do PPC (náklady 2,1–2,5 mil. Kč/měs.,
+   PNO 11–13 % vs. 6–9 % v H1; objednávky +21–23 % YoY, AOV IX–X −1 až −3 % YoY).
+   a) Z denních GA dat urči datum zlomu (změna nákladů PPC / podílu paid search a Shopping
+      na objednávkách) a porovnej období před a po zlomu: AOV celkem, AOV po skupinách,
+      podíl objednávek po skupinách, PNO. Rozlož změnu AOV na mixový a vnitrokanálový efekt.
+   b) Zaveď parametr v = váha vývoje VIII–X/2026 (žlutá buňka, 0–1):
+      - v = 0 → forecast 2027 jen z dlouhodobé historie (vybrané modely bez úpravy),
+      - v = 1 → režim VIII–X/2026 trvá celý rok 2027 (mix kanálů a vnitrokanálová AOV
+        z období po zlomu, YoY dynamika VIII–X aplikovaná na sezónní profil),
+      - mezi tím lineární kombinace: AOV_2027_m = (1 − v) · AOV_base_m + v · AOV_PPC_m.
+      Spočti varianty v = 0 / 0,25 / 0,5 / 0,75 / 1 pro oba vybrané modely.
+   c) Doporuč v a zdůvodni (pokračuje navýšený PPC rozpočet v 2027? autokorelace odchylek,
+      backtest řezu VIII/2026 → IX–X). Volitelně zvaž v proměnné po měsících
+      (např. PPC režim jen v určitých měsících 2027 – nastavitelný řádek vah).
+   d) Dopočet XI–XII/2026 (krok 4) a pásmo 2027 navaž na stejné v, aby byl výstup konzistentní.
+6) Forecast 2027 oběma vybranými modely: měsíčně, roční hodnota vážená objednávkami,
    YoY vs. 2026E, pásmo dolní/střed/horní (pásmo z backtest chyb nebo scénářů mixu).
-6) Implikace pro cíl tržeb CZ (tabulka výše): pro každý měsíc 2027 a celý rok spočti
-   potřebný růst objednávek = (1 + cíl tržeb) / (1 + růst AOV) − 1, pro oba modely.
+7) Implikace pro cíl tržeb CZ (tabulka výše): pro každý měsíc 2027 a celý rok spočti
+   potřebný růst objednávek = (1 + cíl tržeb) / (1 + růst AOV) − 1, pro oba modely
+   a pro doporučené v i krajní varianty v = 0 a v = 1.
    Označ měsíce, kde je cíl (např. IV–V +10 %, VII–VIII +8 %) bez růstu objednávek
    nad historický rámec nereálný.
 
@@ -94,14 +117,17 @@ VÝSTUP
 A) V chatu (max. 1 obrazovka):
    - Tabulka backtestu „jako v březnu 2026“ pro obě báze: model | MAPE | bias | ex ante?
    - Dva vybrané modely (1× GA/BI, 1× ERP) a proč.
-   - Tabulka forecast 2027: měsíce I–XII + rok, pro oba modely, YoY vs. 2026E.
+   - Datum zlomu PPC a srovnání před/po (AOV, mix, PNO) – 1 krátká tabulka.
+   - Tabulka forecast 2027: měsíce I–XII + rok, pro oba modely, YoY vs. 2026E,
+     pro doporučené v; plus roční AOV pro v = 0 / 0,25 / 0,5 / 0,75 / 1.
    - Tabulka implikací: cíl tržeb CZ | růst AOV | potřebný růst objednávek, po měsících + rok.
    - Doporučená plánová hodnota AOV 2027 (BI i ERP báze) a pásmo.
    - 3–5 bodů: hlavní předpoklady, rizika, co data nevysvětlí (promo, produktový mix, služby).
 B) Excel „AOV_2027_CZ_final.xlsx“ – listy: Návod, Souhrn, Data_BI, Data_ERP, BI_vs_ERP,
-   Backtest, Model_GA (vybraný), Model_ERP (vybraný), Forecast_2027, Cíl_2027.
+   Data_GA_denní, Zlom_PPC, Backtest, Model_GA (vybraný), Model_ERP (vybraný),
+   Váha_VIII-X, Forecast_2027, Cíl_2027.
    Konvence: modrá = vstupní data, černá = vzorce, zelená = odkaz na jiný list,
-   žlutá = měnitelné parametry (α, γ, w, váhy, k, cíle růstu) a klíčové výsledky. Výstupy
+   žlutá = měnitelné parametry (α, γ, w, v, váhy, k, cíle růstu) a klíčové výsledky. Výstupy
    Pythonu, které nejdou vzorcem (SARIMA), vlož jako modré hodnoty. Po uzavření měsíce stačí
    přepsat vstupy a vše se přepočte.
 
