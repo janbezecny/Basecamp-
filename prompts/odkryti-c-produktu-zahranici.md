@@ -1,7 +1,7 @@
 # Prompt: Vyhodnocení odkrytí C produktů v zahraničí k 11. 11. 2026
 
 > Zdroj zadání: Basecamp to-do „Odkrytí C produktů v zahraničí“ (bucket 40643108, to-do 10272661744), komentáře 4. 9. – 16. 10. 2026.
-> Použití: vložit blok „PROMPT“ do AI, která má přístup k Power BI reportům, nebo k němu přiložit exporty podle sekce „Data k dodání“.
+> Použití: vložit blok „PROMPT“ do AI, která má přístup k Power BI reportům.
 
 ---
 
@@ -40,7 +40,7 @@ Tato čísla ber jako kontrolní bod. Nejdřív je na stejném období zreproduk
 2. **GA report per SKU (Power BI):** https://app.powerbi.com/groups/me/apps/44b71cd3-f671-4188-a650-ad58ff34bd8a/reports/a983c457-ff52-4cec-94c3-deaec4530d31/61708e1e317e2bd35f1a?experience=power-bi
    Website: vše kromě ruzovyslon.cz, ruzovyslon.sk, kondomshop.cz, kondomshop.sk, flagranti.cz, flagranti.sk. Data jsou zde i po SKU.
 3. **Seznam EAN:** Google Sheet „Produkty k odkrytí v zahraničí 11.9.2026“ – https://docs.google.com/spreadsheets/d/1g8m_jtJmHdE8QrXTpawsNlKj59ZSW6pbx0hpD8ztYmk
-4. **BO tier** (jen skupina C) a **sales data** – přiložené exporty.
+4. **BO tier** (jen skupina C) a **sales data** – v BI reportech; marže, MKT1 náklady a sklad tamtéž, pokud jsou k dispozici.
 
 Pokud se k některému zdroji nedostaneš, nehádej a nenahrazuj ho odhadem. Napiš, který zdroj chybí a jaký export potřebuješ (granularita den × země × SKU × kanál).
 
@@ -90,26 +90,9 @@ Komentář do Basecampu, česky, oslovení „Adam, Gabriel“. Čtenář má ne
 
 ---
 
-## Data k dodání
-
-AI v tomto prostředí se do Power BI nedostane (síť hostitele blokuje a report vyžaduje přihlášení). Pro výpočet jsou potřeba exporty, všechny za **1. 7. 2025 – 11. 11. 2026 po dnech**:
-
-| # | Data | Zdroj | Granularita |
-|---|------|-------|-------------|
-| 1 | GA report, filtr „zahraničí“ | Power BI report 1 | den × země × kanál; zobrazení produktů, relace, tržby |
-| 2 | GA report per SKU, weby dle filtru | Power BI report 2 | den × web × SKU (× kanál, pokud jde) |
-| 3 | BO tier – skupina C + pravidla, kdy je produkt B | BI / Nákup | SKU, tier k 20. 9. a po posledním přepočtu |
-| 4 | Sales data | BI | den × země × SKU; objednávky, kusy, tržby bez DPH, marže nebo nákupní cena, vratky, anonymizované ID zákazníka |
-| 5 | MKT1 náklady na C | Google Ads / BI | den × země × kanál, ideálně po produktu |
-| 6 | Sklad C (ks, nákupní ceny) k 20. 9. a 11. 11. | ERP | SKU |
-| 7 | Log importu z 20. 9. s přeskočenými položkami | Miloš | – |
-
-Export z Power BI: u tabulky „…“ → *Export data* → *Underlying data* (.xlsx nebo .csv).
-
 ## Otevřené otázky
 
 1. Co znamená „BO“ ve výčtu trhů HU, BO, SI, HR, RO, BG? Seznam SKU má jen HU, BG, HR, SL, RO; prompt počítá s těmito pěti.
 2. Jsou už C produkty zařazené do všech podkategorií? Pokud ano, od kdy (rozdělí to období „po“ na dvě fáze).
 3. Jsou v GA4 dočtená data od 29. 9.?
 4. Co přesně patří do MKT1 a kde ty náklady jsou?
-5. Kde jsou sales data (odkaz zatím nepřišel)?
