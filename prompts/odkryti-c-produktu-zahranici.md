@@ -77,6 +77,22 @@ Pokud se k některému zdroji nedostaneš, nehádej a nenahrazuj ho odhadem. Nap
 
 **9. Import a varianty** (pro Miloše). Počet EAN v seznamu, počet skutečně odkrytých včetně dotažených variant a počet přeskočených s důvodem. Pokud log importu nemáš, napiš to.
 
+### Kontrola, že data sedí
+
+Jan si výsledek ověří ručně v Power BI. Na konec výstupu proto přidej část „Jak si to zkontrolovat“, podle které to zvládne do deseti minut bez počítání. U každého čísla uveď report, nastavení filtrů, datum a hodnotu, kterou má v reportu vidět.
+
+- **Kontrolní součty** (součty za období, ne průměry, aby šly porovnat s kartou v reportu):
+  - zobrazení C v zahraničí za 21. 9. – 11. 11. 2026,
+  - zobrazení C v zahraničí za jeden konkrétní den (např. 15. 10. 2026),
+  - tržby C v zahraničí za říjen 2026,
+  - totéž za jednu zemi (např. HU).
+- **Tři konkrétní SKU** ze seznamu (jedno silné, jedno průměrné, jedno s jediným prodejem): zobrazení a prodané kusy za říjen 2026, k dohledání v reportu per SKU.
+- **Návaznost na 6. 10.:** tvoje hodnoty pro 776 a 1 275 zobrazení/den na původním období a rozdíl oproti nim.
+- **Párování seznamu:** kolik z ~6 350 EAN se v datech našlo, kolik ne, a pět příkladů nenalezených.
+- **Vnitřní kontroly**, které jsi provedl sám, s výsledkem ano/ne: součet zemí = celkem; součet kanálů = celkem; období „před“ má 82 dní a „po“ 52 dní minus vyřazené dny (vyjmenuj je); žádné SKU se nepočítá dvakrát kvůli variantám; v datech nejsou weby mimo rozsah ani jiný tier než C.
+
+Pokud se některý kontrolní součet liší od reportu o víc než 1 %, výsledky nevydávej za hotové a napiš, kde rozdíl vzniká.
+
 ### Podoba výstupu
 
 Komentář do Basecampu, česky, oslovení „Adam, Gabriel“. Čtenář má nejdřív dostat odpovědi, potom podklady:
@@ -85,6 +101,7 @@ Komentář do Basecampu, česky, oslovení „Adam, Gabriel“. Čtenář má ne
 2. **Části 1–9**, každá s krátkou tabulkou (před / po / změna / meziroční očištění) a jednou až dvěma větami, co z toho plyne.
 3. **Doporučení:** nechat běžet, nebo upravit; zda zařadit C do všech podkategorií; které produkty přeřadit do B; kdy vyhodnotit znovu (až po zařazení do podkategorií a náběhu organiky a retence).
 4. **Omezení dat:** vyřazené dny, chybějící zdroje, způsob alokace nákladů, vše, co je odhad.
+5. **Jak si to zkontrolovat:** kontrolní součty a kroky podle části „Kontrola, že data sedí“.
 
 Čísla piš s mezerou jako oddělovačem tisíců, jednotky Kč/den a zobrazení/den. U každého závěru rozliš, co je změřeno a co je interpretace. Co z dat spočítat nejde, uveď jako „chybí data: …“ a nevymýšlej náhradní číslo.
 
