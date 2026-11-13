@@ -1,4 +1,4 @@
-# Prompt: AOV 2027 – CZ e-shop (2 nejlepší modely + forecast 2027)
+# Prompt: AOV 2027 – CZ e-shop (GA model, model časové řady, kombinace + forecast 2027)
 
 > Konsolidovaná verze předchozí vícekrokové konverzace. Vložte celý blok níže do nového chatu
 > a přiložte uvedené soubory. Cíle růstu a názvy souborů upravte, pokud se změní.
@@ -12,9 +12,14 @@ Jsi senior analytik pro forecasting e-commerce KPI. Pracuješ samostatně, výpo
 Odpovídej česky, čísla v Kč s mezerou jako oddělovačem tisíců.
 
 CÍL
-Najdi 2 nejlepší použitelné modely průměrné hodnoty objednávky (AOV) pro CZ e-shop a dej jejich
-forecast na rok 2027 (měsíčně I–XII/2027 + roční hodnota + pásmo). Jeden model na GA/BI bázi,
-jeden na sales/ERP bázi. Výběr musí být podložen backtestem, ne intuicí.
+Forecast průměrné hodnoty objednávky (AOV) CZ e-shopu na rok 2027 (měsíčně I–XII/2027 + roční
+hodnota + pásmo). Výstupem jsou tři modely:
+  M1 = nejlepší model podle GA/BI dat (kanálový mix, AOV VČETNĚ služeb),
+  M2 = nejlepší model časové řady sales/ERP (produktové AOV BEZ služeb),
+  M3 = kombinace M1 a M2 (doporučený finální model).
+Každý model musí mít variantu s vahou vývoje VIII–X/2026 (parametr v, krok 5) a každý výsledek
+musí být uveden v OBOU bázích: AOV včetně služeb i AOV bez služeb (produktové).
+Výběr M1 a M2 musí být podložen backtestem, ne intuicí.
 Modeluješ pouze CZ eshop. Jiné existující forecasty/plány nepoužívej a nesrovnávej se s nimi.
 
 VSTUPNÍ DATA (přiložena)
@@ -32,8 +37,9 @@ VSTUPNÍ DATA (přiložena)
    Sloupce: Channel, Sales allocated, Orders allocated, AOV allocated, GM1 allocated, Ads costs,
    PNO allocated, Orders measured (+ estimated varianty – nepoužívat).
    AOV = Sales allocated / Orders allocated (ověř na všech řádcích).
-   Báze obsahuje produkty + služby (poštovné, balné).
-2) „Vývoj AOV 2023-2026 CZ SK HU.xlsx“ – měsíční produktové AOV (sales/ERP, BEZ služeb),
+   Báze obsahuje produkty + služby (poštovné, balné) → AOV VČETNĚ služeb.
+2) „Vývoj AOV 2023-2026 CZ SK HU.xlsx“ – měsíční produktové AOV (sales/ERP data) → AOV BEZ služeb
+   (jen tržby za produkty, bez poštovného, balného a dalších služeb),
    I/2023–X/2026. Použij jen list/řadu CZ.
 3) GA data CZ e-shop po kanálech a dnech (denní granularita, 1. 1. 2025 – 31. 10. 2026):
    - CZ_1_6_2025_GA.xlsx   (1. 1. – 30. 6. 2025)
@@ -51,6 +57,8 @@ VSTUPNÍ DATA (přiložena)
    Heureka, Referral, Organic other, Seznam organic, Seznam brand organic, Facebook,
    Seznam sklik sea, Zbozi, Affil, Srovname, Google ads other, Seznam sklik other,
    Seznam sklik display.
+   GA data (Sales est) jsou VČETNĚ služeb (poštovné, balné) – stejně jako BI exporty;
+   oddělení služeb umožňují jen sloupce GP est incl services vs. GP est products.
    Pozor: GA používá metriky „est“ (odhad), BI exporty „allocated“ → AOV se v jednotlivých
    měsících liší (např. I/2025 GA 905 vs. BI 938 Kč). Porovnávej růsty a podíly, ne koruny;
    rozdíl GA vs. BI po měsících vyčísli. AOV vždy počítej jako Σ Sales est / Σ Orders est
@@ -69,9 +77,17 @@ VSTUPNÍ DATA (přiložena)
 DŮLEŽITÉ VLASTNOSTI DAT (ošetři)
 - Říjen 2026 v BI = jen 1.–30. 10. → pro AOV bez vlivu, objemy jsou neúplné.
 - Listopad–prosinec 2026 nejsou skutečnost → nejdřív je dopočítej (viz krok 4).
-- BI vs. ERP: báze se liší definicí objednávek (BI alokované, ERP realizované) i obsahem
-  (BI včetně služeb). Porovnávej růsty, ne koruny. Spočti měsíční koeficient k = AOV BI / AOV ERP
-  a jeho stabilitu; služby z těchto dat přímo izolovat nejde – uveď to jako omezení.
+- DVĚ BÁZE AOV – klíčové pro celý výstup:
+    • GA a BI data = AOV VČETNĚ služeb (produkty + poštovné, balné, další služby),
+    • sales/ERP data = AOV BEZ služeb (jen produkty).
+  Báze se liší i definicí objednávek (BI alokované, ERP realizované). Porovnávej růsty, ne koruny.
+- PŘEVOD MEZI BÁZEMI (most služeb): spočti měsíční koeficient k = AOV vč. služeb / AOV bez
+  služeb (BI/ERP i GA/ERP), jeho průměr, sezónnost a stabilitu. Doplň odhad služeb z GA:
+  služby na objednávku ≈ (GP est incl services − GP est products) / Orders est / marže služeb
+  (marži služeb odhadni nebo nastav jako žlutý vstup, default 100 % = horní odhad tržeb).
+  Rozlož k na (a) vliv služeb a (b) rozdíl v definici objednávek; výsledný převod
+  AOV bez služeb = AOV vč. služeb / k_2027 (k_2027 jako žlutý vstup, default průměr LTM
+  s měsíční sezónností) a obráceně. Omezení metody výslovně uveď.
 - Roční AOV počítej vážené objednávkami; jako váhy použij Orders allocated z BI
   (pro 2023–2024 ERP řady prostý průměr).
 - Kanály agreguj do 7 skupin: Brand (paid+organic sloučeně – atribuce mezi nimi skáče),
@@ -134,34 +150,53 @@ POSTUP
       - v = 1 → režim VIII–X/2026 trvá celý rok 2027 (mix kanálů a vnitrokanálová AOV
         z období po zlomu, YoY dynamika VIII–X aplikovaná na sezónní profil),
       - mezi tím lineární kombinace: AOV_2027_m = (1 − v) · AOV_base_m + v · AOV_PPC_m.
-      Spočti varianty v = 0 / 0,25 / 0,5 / 0,75 / 1 pro oba vybrané modely.
+      Spočti varianty v = 0 / 0,25 / 0,5 / 0,75 / 1 pro M1, M2 i M3 (M2 jako časová řada
+      dostane režim PPC přes úroveň: AOV_PPC_m = AOV_base_m × (AOV VIII–X 2026 / forecast
+      VIII–X 2026 z modelu natrénovaného do VII/2026)).
+      Výsledek: samostatný „PPC-weighted“ forecast 2027 pro každý model, ne jen poznámka.
    c) Doporuč v a zdůvodni (pokračuje navýšený PPC rozpočet v 2027? autokorelace odchylek,
       backtest řezu VIII/2026 → IX–X). Volitelně zvaž v proměnné po měsících
       (např. PPC režim jen v určitých měsících 2027 – nastavitelný řádek vah).
    d) Dopočet XI–XII/2026 (krok 4) a pásmo 2027 navaž na stejné v, aby byl výstup konzistentní.
-6) Forecast 2027 oběma vybranými modely: měsíčně, roční hodnota vážená objednávkami,
+6) KOMBINOVANÝ MODEL M3 (GA/BI + časová řada ERP):
+   Spoj oba přístupy tak, aby každý přispěl tím, v čem je silný:
+   - ERP časová řada (M2): dlouhá historie 2023–2026 → úroveň a sezónní profil AOV bez služeb,
+   - GA/BI model (M1): kanálový mix a vliv intenzity PPC → úprava úrovně podle režimu VIII–X
+     (parametr v) a scénářů mixu.
+   Otestuj aspoň dvě varianty kombinace a vyber podle backtestu (stejné řezy jako v kroku 3):
+   (i) vážený ensemble převedený na společnou bázi: M3 = u·M1/k + (1 − u)·M2, váha u
+       z inverzní MAPE backtestu (žlutá buňka);
+   (ii) hybrid: M3_m = M2_m × (1 + Δmix_m), kde Δmix_m je relativní efekt změny mixu kanálů
+       a PPC režimu z M1 (mixový efekt bez vnitrokanálového trendu).
+   M3 počítej pro stejné varianty v jako M1 a M2.
+7) Forecast 2027 všemi třemi modely (M1, M2, M3): měsíčně, roční hodnota vážená objednávkami,
    YoY vs. 2026E, pásmo dolní/střed/horní (pásmo z backtest chyb nebo scénářů mixu).
-7) Implikace pro cíl tržeb CZ (tabulka výše): pro každý měsíc 2027 a celý rok spočti
-   potřebný růst objednávek = (1 + cíl tržeb) / (1 + růst AOV) − 1, pro oba modely
-   a pro doporučené v i krajní varianty v = 0 a v = 1.
+   Každou hodnotu uveď v obou bázích: AOV vč. služeb a AOV bez služeb (převod přes k).
+8) Implikace pro cíl tržeb CZ (tabulka výše): pro každý měsíc 2027 a celý rok spočti
+   potřebný růst objednávek = (1 + cíl tržeb) / (1 + růst AOV) − 1, pro M1, M2 a M3
+   a pro doporučené v i krajní varianty v = 0 a v = 1. Použij AOV vč. služeb, pokud je cíl
+   tržeb včetně služeb; jinak AOV bez služeb – bázi cíle uveď.
    Označ měsíce, kde je cíl (např. IV–V +10 %, VII–VIII +8 %) bez růstu objednávek
    nad historický rámec nereálný.
 
 VÝSTUP
 A) V chatu (max. 1 obrazovka):
    - Tabulka backtestu „jako v březnu 2026“ pro obě báze: model | MAPE | bias | ex ante?
-   - Dva vybrané modely (1× GA/BI, 1× ERP) a proč.
+   - Vybrané modely M1 (GA/BI), M2 (časová řada ERP), M3 (kombinace) a proč; u M3 backtest.
    - Datum zlomu PPC a srovnání před/po (AOV, mix, PNO) – 1 krátká tabulka.
-   - Tabulka forecast 2027: měsíce I–XII + rok, pro oba modely, YoY vs. 2026E,
-     pro doporučené v; plus roční AOV pro v = 0 / 0,25 / 0,5 / 0,75 / 1.
+   - Most služeb: k, služby Kč/objednávku (GA proxy), převodní vztah – 1 krátká tabulka.
+   - Tabulka forecast 2027: měsíce I–XII + rok, pro M1, M2, M3, YoY vs. 2026E, pro doporučené v,
+     ve dvou blocích: AOV VČETNĚ služeb | AOV BEZ služeb.
+   - Matice ročního AOV 2027: modely M1/M2/M3 × v = 0 / 0,25 / 0,5 / 0,75 / 1, obě báze.
    - Tabulka implikací: cíl tržeb CZ | růst AOV | potřebný růst objednávek, po měsících + rok.
-   - Doporučená plánová hodnota AOV 2027 (BI i ERP báze) a pásmo.
+   - Doporučená plánová hodnota AOV 2027 = M3 při doporučeném v: jedno číslo vč. služeb
+     a jedno bez služeb, s pásmem.
    - 3–5 bodů: hlavní předpoklady, rizika, co data nevysvětlí (promo, produktový mix, služby).
 B) Excel „AOV_2027_CZ_final.xlsx“ – listy: Návod, Souhrn, Data_BI, Data_ERP, BI_vs_ERP,
-   Data_GA_denní, Zlom_PPC, Backtest, Model_GA (vybraný), Model_ERP (vybraný),
-   Váha_VIII-X, Forecast_2027, Cíl_2027.
+   Data_GA_denní, Zlom_PPC, Most_služby, Backtest, M1_GA_BI, M2_ERP_TS, M3_Kombinace,
+   Váha_VIII-X, Forecast_2027 (obě báze vedle sebe), Cíl_2027.
    Konvence: modrá = vstupní data, černá = vzorce, zelená = odkaz na jiný list,
-   žlutá = měnitelné parametry (α, γ, w, v, váhy, k, cíle růstu) a klíčové výsledky. Výstupy
+   žlutá = měnitelné parametry (α, γ, w, v, u, váhy, k_2027, marže služeb, cíle růstu) a klíčové výsledky. Výstupy
    Pythonu, které nejdou vzorcem (SARIMA), vlož jako modré hodnoty. Po uzavření měsíce stačí
    přepsat vstupy a vše se přepočte.
 
