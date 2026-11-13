@@ -58,15 +58,17 @@ VSTUPNÍ DATA (přiložena)
    Seznam sklik sea, Zbozi, Affil, Srovname, Google ads other, Seznam sklik other,
    Seznam sklik display.
    GA data (Sales est) jsou VČETNĚ služeb (poštovné, balné) – stejně jako BI exporty;
-   oddělení služeb umožňují jen sloupce GP est incl services vs. GP est products.
+   Služby nemají GM1 (nemají náklady), takže rozdíl GP est incl services − GP est products
+   = přímo TRŽBY ZE SLUŽEB. Z GA tedy jde spočítat AOV bez služeb přímo, měsíčně i po kanálech:
+   AOV_GA bez služeb = (Σ Sales est − Σ služby) / Σ Orders est.
    Pozor: GA používá metriky „est“ (odhad), BI exporty „allocated“ → AOV se v jednotlivých
    měsících liší (např. I/2025 GA 905 vs. BI 938 Kč). Porovnávej růsty a podíly, ne koruny;
    rozdíl GA vs. BI po měsících vyčísli. AOV vždy počítej jako Σ Sales est / Σ Orders est
    (nikdy neprůměruj sloupec AOV est).
    Použití: (a) přesné určení data zlomu navýšení PPC (Ads costs po dnech/týdnech),
-   (b) denní/týdenní AOV a mix kanálů před a po zlomu, (c) proxy služeb:
-   GP est incl services − GP est products = hrubý zisk ze služeb (Kč/objednávku, měsíčně)
-   – použij k odhadu vlivu služeb na AOV a k ověření rozdílu BI vs. ERP.
+   (b) denní/týdenní AOV a mix kanálů před a po zlomu, (c) tržby ze služeb:
+   služby = GP est incl services − GP est products (Kč, Kč/objednávku, podíl na tržbách;
+   měsíčně a po skupinách kanálů) → AOV bez služeb po kanálech a převod mezi bázemi.
    Kanály namapuj na stejných 7 skupin jako BI (Brand = Google ads brand + Google brand
    organic + Seznam sklik brand + Seznam brand organic; Paid search non-brand = Google ads sea
    + Seznam sklik sea + Google ads other + Seznam sklik other/display; Shopping/Pmax/srovnávače
@@ -81,13 +83,15 @@ DŮLEŽITÉ VLASTNOSTI DAT (ošetři)
     • GA a BI data = AOV VČETNĚ služeb (produkty + poštovné, balné, další služby),
     • sales/ERP data = AOV BEZ služeb (jen produkty).
   Báze se liší i definicí objednávek (BI alokované, ERP realizované). Porovnávej růsty, ne koruny.
-- PŘEVOD MEZI BÁZEMI (most služeb): spočti měsíční koeficient k = AOV vč. služeb / AOV bez
-  služeb (BI/ERP i GA/ERP), jeho průměr, sezónnost a stabilitu. Doplň odhad služeb z GA:
-  služby na objednávku ≈ (GP est incl services − GP est products) / Orders est / marže služeb
-  (marži služeb odhadni nebo nastav jako žlutý vstup, default 100 % = horní odhad tržeb).
-  Rozlož k na (a) vliv služeb a (b) rozdíl v definici objednávek; výsledný převod
-  AOV bez služeb = AOV vč. služeb / k_2027 (k_2027 jako žlutý vstup, default průměr LTM
-  s měsíční sezónností) a obráceně. Omezení metody výslovně uveď.
+- PŘEVOD MEZI BÁZEMI (most služeb) – rozlož rozdíl na dvě složky:
+  (a) SLUŽBY: z GA přímo, služby = GP est incl services − GP est products (služby nemají GM1);
+      podíl služeb σ = služby / Sales est, Kč/objednávku, po měsících i po skupinách kanálů
+      (malé košíky ze Shopping/Pmax platí poštovné častěji – ověř).
+  (b) DEFINICE OBJEDNÁVEK: k_obj = AOV_GA bez služeb / AOV_ERP (GA est počítá jinak
+      objednávky než ERP); totéž pro BI (k = AOV_BI / AOV_ERP).
+  Celkový převod: AOV bez služeb (ERP) = AOV vč. služeb (GA) × (1 − σ) / k_obj.
+  σ_2027 a k_obj_2027 jako žluté vstupy (default průměr LTM se sezónností; σ volitelně
+  scénářově podle mixu kanálů). Ověř stabilitu obou složek a omezení metody uveď.
 - Roční AOV počítej vážené objednávkami; jako váhy použij Orders allocated z BI
   (pro 2023–2024 ERP řady prostý průměr).
 - Kanály agreguj do 7 skupin: Brand (paid+organic sloučeně – atribuce mezi nimi skáče),
@@ -184,7 +188,7 @@ A) V chatu (max. 1 obrazovka):
    - Tabulka backtestu „jako v březnu 2026“ pro obě báze: model | MAPE | bias | ex ante?
    - Vybrané modely M1 (GA/BI), M2 (časová řada ERP), M3 (kombinace) a proč; u M3 backtest.
    - Datum zlomu PPC a srovnání před/po (AOV, mix, PNO) – 1 krátká tabulka.
-   - Most služeb: k, služby Kč/objednávku (GA proxy), převodní vztah – 1 krátká tabulka.
+   - Most služeb: σ, služby Kč/objednávku, k_obj, převodní vztah – 1 krátká tabulka.
    - Tabulka forecast 2027: měsíce I–XII + rok, pro M1, M2, M3, YoY vs. 2026E, pro doporučené v,
      ve dvou blocích: AOV VČETNĚ služeb | AOV BEZ služeb.
    - Matice ročního AOV 2027: modely M1/M2/M3 × v = 0 / 0,25 / 0,5 / 0,75 / 1, obě báze.
@@ -196,7 +200,7 @@ B) Excel „AOV_2027_CZ_final.xlsx“ – listy: Návod, Souhrn, Data_BI, Data_E
    Data_GA_denní, Zlom_PPC, Most_služby, Backtest, M1_GA_BI, M2_ERP_TS, M3_Kombinace,
    Váha_VIII-X, Forecast_2027 (obě báze vedle sebe), Cíl_2027.
    Konvence: modrá = vstupní data, černá = vzorce, zelená = odkaz na jiný list,
-   žlutá = měnitelné parametry (α, γ, w, v, u, váhy, k_2027, marže služeb, cíle růstu) a klíčové výsledky. Výstupy
+   žlutá = měnitelné parametry (α, γ, w, v, u, váhy, σ_2027, k_obj_2027, cíle růstu) a klíčové výsledky. Výstupy
    Pythonu, které nejdou vzorcem (SARIMA), vlož jako modré hodnoty. Po uzavření měsíce stačí
    přepsat vstupy a vše se přepočte.
 
@@ -218,6 +222,8 @@ Nepiš mezikroky ani průběžné komentáře – dodej jen finální výsledek 
 | AOV 2027 BI (Modely A/B) | 1 086 Kč, pásmo 1 078–1 107 Kč |
 | AOV 2027 ERP (ensemble TS1+TS3) | 1 061 Kč, pásmo 1 013–1 079 Kč |
 | Koeficient k = AOV BI / AOV ERP | 2025 ≈ 1,004, 2026 ≈ 1,011 (měsíčně 0,98–1,03) |
+| Služby z GA (GP incl services − GP products) | 2025: 2,2 % tržeb, 22,9 Kč/obj.; 2026 I–X: 2,7 %, 27,1 Kč/obj. |
+| k_obj = AOV GA bez služeb / AOV ERP | ≈ 0,955, stabilní (měsíčně 0,92–0,97; leden nejnižší) |
 
 Hlavní poznatky: modely s trendem mají záporný bias (−3 až −7 %); měsíční AOV má šum ±3–6 %,
 roční hodnota je plánovatelná s přesností ±1,5–2 %; zlomy v létě a na podzim 2026 nejsou
