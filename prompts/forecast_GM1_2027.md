@@ -1,6 +1,6 @@
 # Prompt: Forecast GM1 na rok 2027 (E-shop CZ a E-shop SK)
 
-> Zkopíruj vše pod čarou do nového chatu s Claudem (ideálně s přístupem k Power BI / Excelu nebo s přiloženými exporty dat).
+> Zkopíruj vše pod čarou do nového chatu s Claudem s připojeným rozšířením Claude in Chrome a přihlášeným Power BI v Chromu.
 
 ---
 
@@ -16,9 +16,11 @@ Pracuj pečlivě, postup popiš transparentně a všechny předpoklady výslovn�
 - Sortiment je rozdělen podle **ABC klasifikace**; skupiny **AA a A jsou naše privátní značka**.
 - **Od 1. 9. 2026 proběhlo přecenění skupin AA a A.** Od té doby je GM1 (zejména GM1 %) mírně nižší než před přeceněním. Jde o strukturální zlom, který modely musí zohlednit — nesmí ho považovat za náhodný šum ani ho slepě ignorovat.
 - Dnešní datum: 27. 11. 2026 → **listopad 2026 je neúplný měsíc**. Buď ho dopočítej (run-rate dle dnů / dle loňského průběhu měsíce, s uvedením metody), nebo ho v modelech označ jako odhad. Nikdy ho nepoužívej jako kompletní skutečnost bez úpravy.
-- Měny: CZ v CZK, SK v EUR. Každý trh forecastuj ve své měně; případný přepočet uveď jen informativně s uvedeným kurzem.
+- Měna: v Power BI jsou **oba trhy (CZ i SK) v CZK**. Forecast proto počítej v CZK pro oba trhy, aby byl přímo porovnatelný s reportem. Na kurz EUR/CZK nic nepřepočítávej.
 
 ## Zdroje dat
+
+**Přístup:** Power BI otevři v prohlížeči **Chrome přes Claude in Chrome** (uživatel je v Chromu přihlášený). Reporty otevírej v nové záložce, filtry nastavuj přímo v reportu a data stahuj exportem z vizuálů. Když export není dostupný, data opiš z tabulkového vizuálu (případně si tabulku zobraz přes „Zobrazit jako tabulku“). Po každém stažení zkontroluj, že je správně nastavený filtr trhu a období.
 
 ### a) Prodejní data / GM1 (Power BI – Sales report)
 URL: https://app.powerbi.com/groups/me/apps/44b71cd3-f671-4188-a650-ad58ff34bd8a/reports/3d51adb4-0b12-4eb6-b590-9ede39fac3bf/salesreport000000002?experience=power-bi
@@ -27,7 +29,7 @@ URL: https://app.powerbi.com/groups/me/apps/44b71cd3-f671-4188-a650-ad58ff34bd8a
 - Vytáhni **měsíčně od 1/2023 do 11/2026**, pro každý trh zvlášť:
   - Tržby bez DPH, GM1 (absolutně), GM1 %, počet objednávek, průměrná hodnota objednávky (AOV), případně prodané kusy.
   - Totéž **rozpadnuté podle ABC klasifikace** (AA, A, B, C, … — dle tříd, které report obsahuje): tržby, GM1, GM1 % za každou třídu a měsíc.
-- Postup exportu: vizuál → „…“ (Více možností) → **Exportovat data** → souhrnná data → CSV/XLSX. Zkontroluj, že je správně nastaven filtr trhu a časová granularita „měsíc“.
+- Postup v Chromu: nastav filtr trhu (E-shop CZ, pak E-shop SK) a časovou granularitu „měsíc“, potom vizuál → „…“ (Více možností) → **Exportovat data** → souhrnná data → CSV/XLSX. Každý trh exportuj zvlášť a stažené soubory pojmenuj podle trhu a obsahu.
 
 ### b) Google Analytics data (Power BI – GA report)
 URL: https://app.powerbi.com/groups/me/apps/44b71cd3-f671-4188-a650-ad58ff34bd8a/reports/55d1c0d4-98d7-4af0-a7d9-df94ea364fb9/3f2f3737d53fdc3817e1?experience=power-bi
@@ -35,7 +37,7 @@ URL: https://app.powerbi.com/groups/me/apps/44b71cd3-f671-4188-a650-ad58ff34bd8a
 - CZ = **ruzovyslon.cz**, SK = **ruzovyslon.sk**.
 - Měsíčně od 1/2023 do 11/2026: sessions (návštěvy), uživatelé, transakce, konverzní poměr (CR), tržby dle GA, ideálně rozpad podle kanálů (organic, paid, direct, e-mail, …).
 
-**Pokud nemáš přímý přístup k Power BI** (reporty vyžadují přihlášení), nevymýšlej data. Řekni mi přesně, které exporty potřebuješ (vizuál, filtry, sloupce, období) a počkej, až je nahraju.
+**Data nikdy nevymýšlej.** Když se k některému vizuálu nebo filtru přes Chrome nedostaneš (chybí oprávnění, vizuál nejde exportovat, nejsou vidět filtry), zastav se a řekni mi přesně, co potřebuješ (vizuál, filtry, sloupce, období).
 
 ### Kontrola kvality dat (před modelováním)
 - Sedí součet ABC tříd na celkový GM1 za měsíc? (tolerance ±0,5 %)
@@ -99,8 +101,8 @@ List **`Backtest`**:
 ### Závěry (list `Závery` + shrnutí v chatu)
 - Který model je nejlepší pro CZ a který pro SK a **proč** (přesnost, stabilita, bias, interpretovatelnost, citlivost na malý vzorek dat).
 - Teoretické zdůvodnění: kdy jsou lepší TS modely (stabilní sezónnost), kdy GA rozklad (změny návštěvnosti/marketingu), kdy ABC přístup (změny marže a mixu – zde přecenění privátky).
-- Doporučený finální forecast 2027 (měsíčně + rok celkem, CZ v CZK, SK v EUR) s intervalem (např. 80 % predikční interval nebo rozpětí scénářů).
-- Hlavní rizika a předpoklady (vývoj po přecenění, Black Friday/Vánoce 2026 ještě nejsou v datech, změny trackingu GA, kurz EUR/CZK).
+- Doporučený finální forecast 2027 (měsíčně + rok celkem, oba trhy v CZK) s intervalem (např. 80 % predikční interval nebo rozpětí scénářů).
+- Hlavní rizika a předpoklady (vývoj po přecenění, Black Friday/Vánoce 2026 ještě nejsou v datech, změny trackingu GA).
 - Doporučení, co sledovat měsíčně a kdy forecast přepočítat.
 
 ## Požadovaná struktura sešitu
